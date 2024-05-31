@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" /> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+   
+    <title>Rooms | OxygenState</title>
+</head>
+<style>
+    *{
+        font-family: 'Inter';
+    }
+    .tooltip {
+    position: relative;
+    display: inline-block;
+    }
+
+    .tooltip .tooltiptext {
+    visibility: hidden;
+    background-color: black;
+    color: white;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 9px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    font-size: 10px;
+    left: 50%;
+    margin-left: -60px;
+    }
+
+    .tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+</style>
+<body>
+{% block body %}
+    <!-- navigation bar start -->
+    <section class="flex py-[10px] bg-[#ffffff] px-[16px] justify-between items-center border-b border-[#d3d3d3] z-10 w-full" style="position: fixed; top: 0;">
+    <div class="logocover flex items-center gap-[16px]">
+        
+        <svg id="toggleBtn" onclick="myFunction()"  class="hover:bg-[#efefef] rounded-[8px] cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <path d="M26.0002 24.5C26.2551 24.5003 26.5003 24.5979 26.6856 24.7728C26.8709 24.9478 26.9825 25.187 26.9974 25.4414C27.0124 25.6958 26.9296 25.9464 26.766 26.1418C26.6024 26.3373 26.3703 26.4629 26.1172 26.493L26.0002 26.5H10.0002C9.74536 26.4997 9.50021 26.4021 9.31488 26.2272C9.12954 26.0522 9.01801 25.813 9.00307 25.5586C8.98813 25.3042 9.07092 25.0536 9.23451 24.8582C9.3981 24.6627 9.63015 24.5371 9.88324 24.507L10.0002 24.5H26.0002ZM26.0002 17.5C26.2655 17.5 26.5198 17.6054 26.7074 17.7929C26.8949 17.9804 27.0002 18.2348 27.0002 18.5C27.0002 18.7652 26.8949 19.0196 26.7074 19.2071C26.5198 19.3946 26.2655 19.5 26.0002 19.5H10.0002C9.73503 19.5 9.48067 19.3946 9.29314 19.2071C9.1056 19.0196 9.00024 18.7652 9.00024 18.5C9.00024 18.2348 9.1056 17.9804 9.29314 17.7929C9.48067 17.6054 9.73503 17.5 10.0002 17.5H26.0002ZM26.0002 10.5C26.2655 10.5 26.5198 10.6054 26.7074 10.7929C26.8949 10.9804 27.0002 11.2348 27.0002 11.5C27.0002 11.7652 26.8949 12.0196 26.7074 12.2071C26.5198 12.3946 26.2655 12.5 26.0002 12.5H10.0002C9.73503 12.5 9.48067 12.3946 9.29314 12.2071C9.1056 12.0196 9.00024 11.7652 9.00024 11.5C9.00024 11.2348 9.1056 10.9804 9.29314 10.7929C9.48067 10.6054 9.73503 10.5 10.0002 10.5H26.0002Z" fill="black"/>
+        </svg>
+        <a href="{% url 'home' %}" class="w-auto">
+            <h1 class="text-[#000000] font-[500] text-[20px]" style="font-family: 'Montserrat';">OxygenState</h1>
+        </a>
+    </div>
+    <a href="{% url 'signout' %}">
+        <div class="logout-container flex justify-center items-center gap-[10px] px-[10px] sm:px-[15px] py-[5px] bg-[#ffffff] hover:bg-[#efefef] rounded-[20px] cursor-pointer" >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M17 7L15.59 8.41L18.17 11H8V13H18.17L15.59 15.58L17 17L22 12L17 7ZM4 5H12V3H4C2.9 3 2 3.9 2 5V19C2 20.1 2.9 21 4 21H12V19H4V5Z" fill="black"/>
+            </svg>
+            <p class="p-0 m-0 text-[#000000] text-[15px] font-[500] hidden sm:flex">Logout</p>
+        </div>
+    </a>
+    </section>
+    <!-- navigation bar end -->
+    <div class="parent-container flex flex-1 flex-grow-1 flex-shrink-1 flex-basis-0" style="align-items: flex-start; align-self: stretch;">
+        <div id="menuopen" class="side-menu flex min-w-[220px] flex-col md:flex pt-[57px]" style="height: 100vh; align-items: flex-start; align-self: stretch; border-right: 1px solid #d3d3d3; position: sticky; top: 0;">
+            <div class="side-menu-cont1 flex flex-col items-center w-full px-[12px] py-[10px] flex-1 flex-grow-1 flex-shrink-1 flex-basis-0" style="align-items: flex-start; align-self: stretch;">
+                
+                <a href="{% url 'home' %}" class="w-full">
+                    <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M20 19V10.5C20 10.3448 19.9639 10.1916 19.8944 10.0528C19.825 9.91393 19.7242 9.79315 19.6 9.7L12.6 4.45C12.4269 4.32018 12.2164 4.25 12 4.25C11.7836 4.25 11.5731 4.32018 11.4 4.45L4.4 9.7C4.2758 9.79315 4.175 9.91393 4.10557 10.0528C4.03614 10.1916 4 10.3448 4 10.5V19C4 19.2652 4.10536 19.5196 4.29289 19.7071C4.48043 19.8946 4.73478 20 5 20H9C9.26522 20 9.51957 19.8946 9.70711 19.7071C9.89464 19.5196 10 19.2652 10 19V16C10 15.7348 10.1054 15.4804 10.2929 15.2929C10.4804 15.1054 10.7348 15 11 15H13C13.2652 15 13.5196 15.1054 13.7071 15.2929C13.8946 15.4804 14 15.7348 14 16V19C14 19.2652 14.1054 19.5196 14.2929 19.7071C14.4804 19.8946 14.7348 20 15 20H19C19.2652 20 19.5196 19.8946 19.7071 19.7071C19.8946 19.5196 20 19.2652 20 19Z" stroke="black" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M4 18L4.5 20H9.5L10 19L10.5 15H14V19L15 20H19L20 19V10L12 4L4 10V18Z" fill="black" stroke="black"/>
+                        </svg>
+                        <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        -webkit-box-orient: vertical; overflow: hidden;
+                        -webkit-line-clamp: 1;">Home</h1>
+                    </div>
+                </a>
+
+                <a href="{% url 'students' %}" class="w-full">
+                    <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M18.5391 12.4805C18.8594 13.043 19.0977 13.6289 19.2539 14.2383C19.4102 14.8477 19.4922 15.4766 19.5 16.125V17.332L12 21.0938L4.5 17.332C4.5 16.8633 4.50391 16.4258 4.51172 16.0195C4.51953 15.6133 4.55469 15.2188 4.61719 14.8359C4.67969 14.4531 4.77344 14.0703 4.89844 13.6875C5.02344 13.3047 5.21094 12.9023 5.46094 12.4805L3 11.25V18.1289C3.22656 18.207 3.42969 18.3164 3.60938 18.457C3.78906 18.5977 3.94922 18.7617 4.08984 18.9492C4.23047 19.1367 4.33203 19.3398 4.39453 19.5586C4.45703 19.7773 4.49219 20.0078 4.5 20.25V24H0V20.25C0 20.0156 0.0351562 19.7891 0.105469 19.5703C0.175781 19.3516 0.277344 19.1445 0.410156 18.9492C0.542969 18.7539 0.699219 18.5898 0.878906 18.457C1.05859 18.3242 1.26562 18.2148 1.5 18.1289V10.5L0 9.75L12 3.75L24 9.75L18.5391 12.4805ZM3 20.25C3 20.0469 2.92578 19.8711 2.77734 19.7227C2.62891 19.5742 2.45312 19.5 2.25 19.5C2.04688 19.5 1.87109 19.5742 1.72266 19.7227C1.57422 19.8711 1.5 20.0469 1.5 20.25V22.5H3V20.25ZM3.35156 9.75L12 14.0742L20.6484 9.75L12 5.42578L3.35156 9.75ZM18 16.4062C18 15.8047 17.9414 15.2461 17.8242 14.7305C17.707 14.2148 17.5 13.6875 17.2031 13.1484L12 15.75L6.79688 13.1484C6.53906 13.6016 6.34375 14.0781 6.21094 14.5781C6.07812 15.0781 6.00781 15.5938 6 16.125V16.4062L12 19.4062L18 16.4062Z" fill="black"/>
+                        </svg>
+                        <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        -webkit-box-orient: vertical; overflow: hidden;
+                        -webkit-line-clamp: 1;">Students</h1>
+                    </div>
+                </a>
+
+
+                
+                <a href="{% url 'rooms' %}" class="w-full">
+                    <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M4 4H5.71429V20H4V4ZM10 7.2H17V8.8H10V7.2ZM10 10.4L17 10.5V12H10V10.4Z" fill="black"/>
+                            <path d="M18.2667 4H7V20H18.2667C19.2226 20 20 19.2824 20 18.4V5.6C20 4.7176 19.2226 4 18.2667 4ZM18.2667 18.4H8.73333V5.6H18.2667V18.4Z" fill="black"/>
+                        </svg>
+                        <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        -webkit-box-orient: vertical; overflow: hidden;
+                        -webkit-line-clamp: 1;">Rooms</h1>
+                    </div>
+                 </a>
+
+
+
+                 <a href="{% url 'paymentinfo' %}" class="w-full">
+                    <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M13.66 7C13.1 5.82 11.9 5 10.5 5H6V3H18V5H14.74C15.22 5.58 15.58 6.26 15.79 7H18V9H15.98C15.73 11.8 13.37 14 10.5 14H9.77L16.5 21H13.73L7 14V12H10.5C12.26 12 13.72 10.7 13.96 9H6V7H13.66Z" fill="black"/>
+                        </svg>
+                        <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        -webkit-box-orient: vertical; overflow: hidden;
+                        -webkit-line-clamp: 1;">Payment Info</h1>
+                    </div>
+                 </a>
+                
+            </div>
+        </div>
+
+
+        <div id="menuclose" class="side-menu-collapsed flex w-auto flex-col md:flex pt-[57px]" style="display: none; height: 100vh; align-items: flex-start; align-self: stretch; border-right: 1px solid #d3d3d3; position: sticky; top:0;">
+            <div class="side-menu-cont1 flex flex-col items-center w-full px-[12px] py-[10px] flex-1 flex-grow-1 flex-shrink-1 flex-basis-0" style="align-items: flex-start; align-self: stretch;">
+                <a href="{% url 'home' %}">
+                <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M20 19V10.5C20 10.3448 19.9639 10.1916 19.8944 10.0528C19.825 9.91393 19.7242 9.79315 19.6 9.7L12.6 4.45C12.4269 4.32018 12.2164 4.25 12 4.25C11.7836 4.25 11.5731 4.32018 11.4 4.45L4.4 9.7C4.2758 9.79315 4.175 9.91393 4.10557 10.0528C4.03614 10.1916 4 10.3448 4 10.5V19C4 19.2652 4.10536 19.5196 4.29289 19.7071C4.48043 19.8946 4.73478 20 5 20H9C9.26522 20 9.51957 19.8946 9.70711 19.7071C9.89464 19.5196 10 19.2652 10 19V16C10 15.7348 10.1054 15.4804 10.2929 15.2929C10.4804 15.1054 10.7348 15 11 15H13C13.2652 15 13.5196 15.1054 13.7071 15.2929C13.8946 15.4804 14 15.7348 14 16V19C14 19.2652 14.1054 19.5196 14.2929 19.7071C14.4804 19.8946 14.7348 20 15 20H19C19.2652 20 19.5196 19.8946 19.7071 19.7071C19.8946 19.5196 20 19.2652 20 19Z" stroke="black" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M4 18L4.5 20H9.5L10 19L10.5 15H14V19L15 20H19L20 19V10L12 4L4 10V18Z" fill="black" stroke="black"/>
+                    </svg>
+                    <!-- <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    -webkit-box-orient: vertical; overflow: hidden;
+                    -webkit-line-clamp: 1;">Home</h1> -->
+                </div>
+                </a>
+
+                <a href="{% url 'students' %}">
+                <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M18.5391 12.4805C18.8594 13.043 19.0977 13.6289 19.2539 14.2383C19.4102 14.8477 19.4922 15.4766 19.5 16.125V17.332L12 21.0938L4.5 17.332C4.5 16.8633 4.50391 16.4258 4.51172 16.0195C4.51953 15.6133 4.55469 15.2188 4.61719 14.8359C4.67969 14.4531 4.77344 14.0703 4.89844 13.6875C5.02344 13.3047 5.21094 12.9023 5.46094 12.4805L3 11.25V18.1289C3.22656 18.207 3.42969 18.3164 3.60938 18.457C3.78906 18.5977 3.94922 18.7617 4.08984 18.9492C4.23047 19.1367 4.33203 19.3398 4.39453 19.5586C4.45703 19.7773 4.49219 20.0078 4.5 20.25V24H0V20.25C0 20.0156 0.0351562 19.7891 0.105469 19.5703C0.175781 19.3516 0.277344 19.1445 0.410156 18.9492C0.542969 18.7539 0.699219 18.5898 0.878906 18.457C1.05859 18.3242 1.26562 18.2148 1.5 18.1289V10.5L0 9.75L12 3.75L24 9.75L18.5391 12.4805ZM3 20.25C3 20.0469 2.92578 19.8711 2.77734 19.7227C2.62891 19.5742 2.45312 19.5 2.25 19.5C2.04688 19.5 1.87109 19.5742 1.72266 19.7227C1.57422 19.8711 1.5 20.0469 1.5 20.25V22.5H3V20.25ZM3.35156 9.75L12 14.0742L20.6484 9.75L12 5.42578L3.35156 9.75ZM18 16.4062C18 15.8047 17.9414 15.2461 17.8242 14.7305C17.707 14.2148 17.5 13.6875 17.2031 13.1484L12 15.75L6.79688 13.1484C6.53906 13.6016 6.34375 14.0781 6.21094 14.5781C6.07812 15.0781 6.00781 15.5938 6 16.125V16.4062L12 19.4062L18 16.4062Z" fill="black"/>
+                    </svg>
+                    <!-- <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    -webkit-box-orient: vertical; overflow: hidden;
+                    -webkit-line-clamp: 1;">Students</h1> -->
+                </div>
+                </a>
+
+                <a href="{% url 'rooms' %}">
+                <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M4 4H5.71429V20H4V4ZM10 7.2H17V8.8H10V7.2ZM10 10.4L17 10.5V12H10V10.4Z" fill="black"/>
+                        <path d="M18.2667 4H7V20H18.2667C19.2226 20 20 19.2824 20 18.4V5.6C20 4.7176 19.2226 4 18.2667 4ZM18.2667 18.4H8.73333V5.6H18.2667V18.4Z" fill="black"/>
+                    </svg>
+                    <!-- <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    -webkit-box-orient: vertical; overflow: hidden;
+                    -webkit-line-clamp: 1;">Rooms</h1> -->
+                </div>
+                </a>
+
+                
+
+                <a href="{% url 'paymentinfo' %}">
+                    <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M13.66 7C13.1 5.82 11.9 5 10.5 5H6V3H18V5H14.74C15.22 5.58 15.58 6.26 15.79 7H18V9H15.98C15.73 11.8 13.37 14 10.5 14H9.77L16.5 21H13.73L7 14V12H10.5C12.26 12 13.72 10.7 13.96 9H6V7H13.66Z" fill="black"/>
+                        </svg>
+                        <!-- <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        -webkit-box-orient: vertical; overflow: hidden;
+                        -webkit-line-clamp: 1;">Rooms</h1> -->
+                    </div>
+                    </a>
+            </div>
+        </div>
+
+        <div id="menumob" class="side-menu flex min-w-[275px] bg-[#ffffff] flex-col md:flex z-3" style="display: none; height: 100vh; align-items: flex-start; align-self: stretch; border-right: 1px solid #d3d3d3; position: fixed; top: 0; left: 0; z-index: 10;">
+            <div class="side-menu-cont1 flex flex-col items-center w-full px-[12px] py-[10px] flex-1 flex-grow-1 flex-shrink-1 flex-basis-0" style="align-items: flex-start; align-self: stretch;">
+                <div class="menuitems flex items-center gap-[20px] w-auto px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                    <svg onclick="mobfuncclose()" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 5L19 19M5 19L19 5" stroke="black" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    
+                </div>
+
+                <a href="{% url 'home' %}" class="w-full">
+                <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M20 19V10.5C20 10.3448 19.9639 10.1916 19.8944 10.0528C19.825 9.91393 19.7242 9.79315 19.6 9.7L12.6 4.45C12.4269 4.32018 12.2164 4.25 12 4.25C11.7836 4.25 11.5731 4.32018 11.4 4.45L4.4 9.7C4.2758 9.79315 4.175 9.91393 4.10557 10.0528C4.03614 10.1916 4 10.3448 4 10.5V19C4 19.2652 4.10536 19.5196 4.29289 19.7071C4.48043 19.8946 4.73478 20 5 20H9C9.26522 20 9.51957 19.8946 9.70711 19.7071C9.89464 19.5196 10 19.2652 10 19V16C10 15.7348 10.1054 15.4804 10.2929 15.2929C10.4804 15.1054 10.7348 15 11 15H13C13.2652 15 13.5196 15.1054 13.7071 15.2929C13.8946 15.4804 14 15.7348 14 16V19C14 19.2652 14.1054 19.5196 14.2929 19.7071C14.4804 19.8946 14.7348 20 15 20H19C19.2652 20 19.5196 19.8946 19.7071 19.7071C19.8946 19.5196 20 19.2652 20 19Z" stroke="black" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M4 18L4.5 20H9.5L10 19L10.5 15H14V19L15 20H19L20 19V10L12 4L4 10V18Z" fill="black" stroke="black"/>
+                    </svg>
+                    <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    -webkit-box-orient: vertical; overflow: hidden;
+                    -webkit-line-clamp: 1;">Home</h1>
+                </div>
+                </a>
+
+                <a href="{% url 'students' %}" class="w-full">
+                <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M18.5391 12.4805C18.8594 13.043 19.0977 13.6289 19.2539 14.2383C19.4102 14.8477 19.4922 15.4766 19.5 16.125V17.332L12 21.0938L4.5 17.332C4.5 16.8633 4.50391 16.4258 4.51172 16.0195C4.51953 15.6133 4.55469 15.2188 4.61719 14.8359C4.67969 14.4531 4.77344 14.0703 4.89844 13.6875C5.02344 13.3047 5.21094 12.9023 5.46094 12.4805L3 11.25V18.1289C3.22656 18.207 3.42969 18.3164 3.60938 18.457C3.78906 18.5977 3.94922 18.7617 4.08984 18.9492C4.23047 19.1367 4.33203 19.3398 4.39453 19.5586C4.45703 19.7773 4.49219 20.0078 4.5 20.25V24H0V20.25C0 20.0156 0.0351562 19.7891 0.105469 19.5703C0.175781 19.3516 0.277344 19.1445 0.410156 18.9492C0.542969 18.7539 0.699219 18.5898 0.878906 18.457C1.05859 18.3242 1.26562 18.2148 1.5 18.1289V10.5L0 9.75L12 3.75L24 9.75L18.5391 12.4805ZM3 20.25C3 20.0469 2.92578 19.8711 2.77734 19.7227C2.62891 19.5742 2.45312 19.5 2.25 19.5C2.04688 19.5 1.87109 19.5742 1.72266 19.7227C1.57422 19.8711 1.5 20.0469 1.5 20.25V22.5H3V20.25ZM3.35156 9.75L12 14.0742L20.6484 9.75L12 5.42578L3.35156 9.75ZM18 16.4062C18 15.8047 17.9414 15.2461 17.8242 14.7305C17.707 14.2148 17.5 13.6875 17.2031 13.1484L12 15.75L6.79688 13.1484C6.53906 13.6016 6.34375 14.0781 6.21094 14.5781C6.07812 15.0781 6.00781 15.5938 6 16.125V16.4062L12 19.4062L18 16.4062Z" fill="black"/>
+                    </svg>
+                    <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    -webkit-box-orient: vertical; overflow: hidden;
+                    -webkit-line-clamp: 1;">Students</h1>
+                </div>
+                </a>
+
+                <a href="{% url 'rooms' %}" class="w-full">
+                <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M4 4H5.71429V20H4V4ZM10 7.2H17V8.8H10V7.2ZM10 10.4L17 10.5V12H10V10.4Z" fill="black"/>
+                        <path d="M18.2667 4H7V20H18.2667C19.2226 20 20 19.2824 20 18.4V5.6C20 4.7176 19.2226 4 18.2667 4ZM18.2667 18.4H8.73333V5.6H18.2667V18.4Z" fill="black"/>
+                    </svg>
+                    <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    -webkit-box-orient: vertical; overflow: hidden;
+                    -webkit-line-clamp: 1;">Rooms</h1>
+                </div>
+                </a>
+                
+                <a href="{% url 'paymentinfo' %}" class="w-full">
+                    <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M13.66 7C13.1 5.82 11.9 5 10.5 5H6V3H18V5H14.74C15.22 5.58 15.58 6.26 15.79 7H18V9H15.98C15.73 11.8 13.37 14 10.5 14H9.77L16.5 21H13.73L7 14V12H10.5C12.26 12 13.72 10.7 13.96 9H6V7H13.66Z" fill="black"/>
+                        </svg>
+                        <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        -webkit-box-orient: vertical; overflow: hidden;
+                        -webkit-line-clamp: 1;">Payment Info</h1>
+                    </div>
+                 </a>
+            </div>
+        </div>
+
+        <div class="content-container flex w-full bg-[#ffffff] px-[15px] sm:px-[25px] md:px-[45px] pt-[80px] md:pt-[87px] pb-[10px] flex-col gap-[20px] sm:gap-[20px]">
+            
+            <div class="flex gap-[20px] flex-col" style="position: relative;">
+                   
+                    {% if room.roomimagenumber == 1 %}
+                        <div class="flex w-full h-[170px] sm:h-[180px] md:h-[180px] rounded-[13px] flex-col p-[15px] sm:p-[25px] md:[40px] justify-center" style=" position: relative; background-image: url('https://gstatic.com/classroom/themes/img_bookclub.jpg'); object-fit: cover; background-size: cover; background-repeat: no-repeat;">
+                    {% elif room.roomimagenumber == 2 %}
+                        <div class="flex w-full h-[170px] sm:h-[180px] md:h-[180px] rounded-[13px] flex-col p-[15px] sm:p-[25px] md:[40px] justify-center" style=" position: relative; background-image: url('https://gstatic.com/classroom/themes/Geometry.jpg'); object-fit: cover; background-size: cover; background-repeat: no-repeat;">
+                    {% elif room.roomimagenumber == 3 %}
+                        <div class="flex w-full h-[170px] sm:h-[180px] md:h-[180px] rounded-[13px] flex-col p-[15px] sm:p-[25px] md:[40px] justify-center" style=" position: relative; background-image: url('https://gstatic.com/classroom/themes/Math.jpg'); object-fit: cover; background-size: cover; background-repeat: no-repeat;">
+                    {% elif room.roomimagenumber == 4 %}
+                        <div class="flex w-full h-[170px] sm:h-[180px] md:h-[180px] rounded-[13px] flex-col p-[15px] sm:p-[25px] md:[40px] justify-center" style=" position: relative; background-image: url('https://gstatic.com/classroom/themes/img_reachout.jpg'); object-fit: cover; background-size: cover; background-repeat: no-repeat;">
+                    {% else %}
+                        <div class="flex w-full h-[170px] sm:h-[180px] md:h-[180px] rounded-[13px] flex-col p-[15px] sm:p-[25px] md:[40px] justify-center" style=" position: relative; background-image: url('https://gstatic.com/classroom/themes/img_backtoschool.jpg'); object-fit: cover; background-size: cover; background-repeat: no-repeat;">
+                    {% endif %}
+                            <h2 class="p-0 text-[26px] w-full max-w-[700px] sm:text-[26px] md:text-[36px] text-[#ffffff]" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; ">{{room.roomname}}</h2>
+                    <p class="p-0 text-[14px] w-full  text-[#ffffff]" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        {% if student_count == 0 %} 
+                            Empty room · Room charge ₹{{ room.room_amount }}
+                        {% else %} 
+                            {{student_count}} Students · Room charge ₹{{ room.room_amount }}
+                        {% endif %}</p>
+                    
+                    
+                    <svg onclick="confirm()" class="cursor-pointer absolute top-[15px] right-[15px]" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
+                        <rect width="36" height="36" rx="18" fill="white"/>
+                        <path d="M16.125 10.875V11.25H19.875V10.875C19.875 10.3777 19.6775 9.90081 19.3258 9.54917C18.9742 9.19754 18.4973 9 18 9C17.5027 9 17.0258 9.19754 16.6742 9.54917C16.3225 9.90081 16.125 10.3777 16.125 10.875ZM14.625 11.25V10.875C14.625 9.97989 14.9806 9.12145 15.6135 8.48851C16.2465 7.85558 17.1049 7.5 18 7.5C18.8951 7.5 19.7535 7.85558 20.3865 8.48851C21.0194 9.12145 21.375 9.97989 21.375 10.875V11.25H27C27.1989 11.25 27.3897 11.329 27.5303 11.4697C27.671 11.6103 27.75 11.8011 27.75 12C27.75 12.1989 27.671 12.3897 27.5303 12.5303C27.3897 12.671 27.1989 12.75 27 12.75H25.869L24.45 25.176C24.3454 26.0911 23.9076 26.9358 23.2201 27.5488C22.5326 28.1618 21.6436 28.5004 20.7225 28.5H15.2775C14.3564 28.5004 13.4674 28.1618 12.7799 27.5488C12.0924 26.9358 11.6546 26.0911 11.55 25.176L10.131 12.75H9C8.80109 12.75 8.61032 12.671 8.46967 12.5303C8.32902 12.3897 8.25 12.1989 8.25 12C8.25 11.8011 8.32902 11.6103 8.46967 11.4697C8.61032 11.329 8.80109 11.25 9 11.25H14.625ZM13.041 25.005C13.1036 25.5539 13.366 26.0606 13.7782 26.4286C14.1904 26.7965 14.7235 26.9999 15.276 27H20.7233C21.2757 26.9999 21.8089 26.7965 22.2211 26.4286C22.6332 26.0606 22.8956 25.5539 22.9583 25.005L24.36 12.75H11.6407L13.041 25.005ZM15.75 15.375C15.9489 15.375 16.1397 15.454 16.2803 15.5947C16.421 15.7353 16.5 15.9261 16.5 16.125V23.625C16.5 23.8239 16.421 24.0147 16.2803 24.1553C16.1397 24.296 15.9489 24.375 15.75 24.375C15.5511 24.375 15.3603 24.296 15.2197 24.1553C15.079 24.0147 15 23.8239 15 23.625V16.125C15 15.9261 15.079 15.7353 15.2197 15.5947C15.3603 15.454 15.5511 15.375 15.75 15.375ZM21 16.125C21 15.9261 20.921 15.7353 20.7803 15.5947C20.6397 15.454 20.4489 15.375 20.25 15.375C20.0511 15.375 19.8603 15.454 19.7197 15.5947C19.579 15.7353 19.5 15.9261 19.5 16.125V23.625C19.5 23.8239 19.579 24.0147 19.7197 24.1553C19.8603 24.296 20.0511 24.375 20.25 24.375C20.4489 24.375 20.6397 24.296 20.7803 24.1553C20.921 24.0147 21 23.8239 21 23.625V16.125Z" fill="black"/>
+                    </svg>
+                </div>
+
+               
+            </div>
+            <div class="flex gap-[15px] w-full" style="justify-content: space-between;">
+                <a onclick="openaddstudents()" class="hidden md:block text-[14px] font-[500] bg-[#ffffff] text-[#000000 px-[18px] py-[7px] rounded-[20px] w-full sm:w-auto text-center" style="cursor: pointer; border: 1px solid #d3d3d3; overflow: hidden; text-overflow: ellipsis; text-wrap: nowrap;">Add/Remove Students</a>
+                <a onclick="openaddstudents()" class="block md:hidden [14px] font-[500] bg-[#ffffff] text-[#000000 rounded-[20px] w-[37px] h-[37px] sm:w-auto text-center" style="cursor: pointer; border: 1px solid #d3d3d3;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="37" height="37" viewBox="0 0 37 37" fill="none">
+                        <path d="M8 27H29V28.5H8V27ZM25.55 14.25C26.15 13.65 26.15 12.75 25.55 12.15L22.85 9.45C22.25 8.85 21.35 8.85 20.75 9.45L9.5 20.7V25.5H14.3L25.55 14.25ZM21.8 10.5L24.5 13.2L22.25 15.45L19.55 12.75L21.8 10.5ZM11 24V21.3L18.5 13.8L21.2 16.5L13.7 24H11Z" fill="black"/>
+                      </svg>
+                </a>
+                
+                <div class="flex gap-[15px] w-auto">
+                    <a onclick="opendate()" class="hidden md:block text-[14px] font-[500] bg-[#ffffff] text-[#000000 px-[18px] py-[7px] rounded-[20px] w-full sm:w-auto text-center" style="border: 1px solid #d3d3d3; overflow: hidden; text-overflow: ellipsis; text-wrap: nowrap;">Edit Attendance</a>
+                    <a onclick="opendate()" class="block md:hidden [14px] font-[500] bg-[#ffffff] text-[#000000 rounded-[20px] w-[37px] h-[37px] sm:w-auto text-center" style="cursor: pointer; border: 1px solid #d3d3d3;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="37" height="37" viewBox="0 0 37 37" fill="none">
+                            <path d="M26 19V12.749C26.0001 12.6701 25.9845 12.5919 25.9543 12.519C25.9241 12.446 25.8798 12.3798 25.824 12.324L22.676 9.176C22.5636 9.06345 22.4111 9.00014 22.252 9H10.6C10.4409 9 10.2883 9.06321 10.1757 9.17574C10.0632 9.28826 10 9.44087 10 9.6V28.4C10 28.5591 10.0632 28.7117 10.1757 28.8243C10.2883 28.9368 10.4409 29 10.6 29H17M14 17H22M14 13H18M14 21H17M23.954 23.94L24.954 22.94C25.058 22.8357 25.1816 22.7529 25.3177 22.6965C25.4538 22.64 25.5997 22.6109 25.747 22.6109C25.8943 22.6109 26.0402 22.64 26.1763 22.6965C26.3124 22.7529 26.436 22.8357 26.54 22.94C26.6442 23.044 26.7268 23.1676 26.7832 23.3035C26.8396 23.4395 26.8686 23.5853 26.8686 23.7325C26.8686 23.8797 26.8396 24.0255 26.7832 24.1615C26.7268 24.2974 26.6442 24.421 26.54 24.525L25.54 25.525L23.954 23.939L20.963 26.93C20.8135 27.08 20.7154 27.2737 20.683 27.483L20.439 29.04L21.996 28.797C22.2053 28.7646 22.399 28.6665 22.549 28.517L25.539 25.525" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M22 9V12.4C22 12.5591 22.0632 12.7117 22.1757 12.8243C22.2883 12.9368 22.4409 13 22.6 13H26" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                    </a>
+                    <a href="{% url 'record_attendance' roomname=room.roomname %}" class="text-[14px] font-[500] bg-[#000000] text-[#ffffff] px-[18px] py-[7px] text-center rounded-[20px] w-full sm:w-auto" style="overflow: hidden; text-overflow: ellipsis; text-wrap: nowrap;">Take Attendance</a>
+                </div>
+            </div>
+
+
+            
+            
+            <div class="my-[10px] px-[0px] sm:px-[10px]">
+                {% if students_list %}
+                    {% for student in students_list %}
+                    <a href="{% url 'student_profile' student.id %}" class="block w-full h-auto focus:bg-[#F3F3F3]" >
+                        <div class="py-[10px]  flex" style="flex-wrap: wrap; border-bottom: 1px solid #D3D3D3; align-items: center; gap: 12px;">
+                            <div class="text-[14px] font-[500] w-auto max-w-[240px] sm:w-[280px] text-[#000000] hover:text-[#2475D4] hover:underline" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"> {{ student.full_name }}</div>
+                            
+                            
+                            {% for attendance in attendance_lists %}
+                                {% if attendance.student.id == student.id and attendance.attended %}
+                                    <div class="flex min-w-[30px] w-[30px] h-[30px] text-[13px] items-center justify-center bg-[#E0F2E5] rounded-[35px] text-[#00A52E] font-[500] tooltip" style="text-wrap: nowrap;">
+                                        P
+                                        <span class="tooltiptext">Present Today</span>
+                                    </div>
+                                {% elif attendance.student.id == student.id %}
+                                    <div class="flex min-w-[30px] w-[30px] h-[30px] text-[13px] items-center justify-center bg-[#FFEAEA] rounded-[35px] text-[#F03333] font-[500] tooltip" style="text-wrap: nowrap;">
+                                        A
+                                        <span class="tooltiptext">Absent Today</span>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            {% for std in students_with_payment %}
+                                {% if std.student.id == student.id %}
+                                    <div class="flex px-[11px] py-[5px] text-[13px] items-center justify-center bg-[#E0F2E5] rounded-[35px] text-[#00A52E] font-[500] tooltip" style="text-wrap: nowrap;">
+                                        Fee Paid
+                                        <span class="tooltiptext"> Fee paid for {{today|date:"F"}}</span> 
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            <!-- {% if student.id in attendance_lists.student.id %}
+                            <ul>
+                                {% for attendance in attendance_lists.student.id %}
+                                <li>
+                                    <strong>Date:</strong> {{ attendance.date }} -
+                                    <strong>Attendance:</strong> {% if attendance.attended == True %}Present{% else %}Absent{% endif %}
+                                    {% if attendance.reason %} ({{ attendance.reason }}){% endif %}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                            <p>No attendance records found for this student.</p>
+                            {% endif %} -->
+    <!-- 
+                            {% for date in dates %}
+                                <div class="flex p-2 rounded-[20px] text-[12px] justify-center" style="border: 1px solid #d3d3d3;">
+                                    <div>{{ date|date:"D" }} {{ date.day }}</div>
+                                    <div>Present</div>
+                                </div>
+                            {% endfor %} -->
+                            
+                            
+                            
+                        </div>
+                    </a>
+                {% endfor %}
+            
+                {% else %}
+            
+                    <div class="flex w-full flex-col max-w-[300px] px-2 justify-center items-center mx-auto py-8  gap-[15px]">
+                        <div class="w-full max-w-[150px] ">
+                        <svg viewBox="0 0 181 143" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="nViTIe">
+                            <path
+                                d="M160.156 107.599C161.764 100.018 166.818 93.3552 172.944 90.7515C173.94 90.3686 175.165 90.1388 175.701 91.0578C176.084 91.747 175.931 92.7426 175.625 93.6615C173.251 101.549 166.282 107.369 159.543 107.063"
+                                fill="#CEEAD6" class="VnOHwf-Ysl7Fe"></path>
+                            <path
+                                d="M160.615 108.441C160.768 100.707 157.322 92.9724 151.884 88.9902C151.042 88.3776 149.893 87.8415 149.128 88.6839C148.592 89.2965 148.515 90.2921 148.592 91.211C149.128 99.4051 154.641 106.757 161.227 108.059"
+                                fill="#CEEAD6" class="VnOHwf-Ysl7Fe"></path>
+                            <path
+                                d="M160.156 123.298C161.764 115.717 166.818 109.054 172.944 106.451C173.94 106.068 175.165 105.838 175.701 106.757C176.084 107.446 175.931 108.442 175.625 109.361C173.251 117.248 166.282 123.069 159.543 122.762"
+                                fill="#CEEAD6" class="VnOHwf-Ysl7Fe"></path>
+                            <path
+                                d="M159.083 124.906C159.236 117.172 155.79 109.437 150.353 105.455C149.511 104.842 148.362 104.306 147.596 105.149C147.06 105.761 146.984 106.757 147.06 107.676C147.596 115.87 153.11 123.222 159.696 124.523"
+                                fill="#CEEAD6" class="VnOHwf-Ysl7Fe"></path>
+                            <path d="M73.3906 120.848H99.4278" stroke="#5F6368" stroke-width="2" stroke-linecap="round"></path>
+                            <path
+                                d="M164.521 82.5576C163.244 87.4077 161.034 98.8999 160.309 105.914C159.16 117.019 159.415 124.166 159.16 128.888"
+                                stroke="#5F6368" stroke-width="2"></path>
+                            <path
+                                d="M164.291 89.1436C168.52 89.1436 171.949 85.6122 171.949 81.2559C171.949 76.8996 168.52 73.3682 164.291 73.3682C160.061 73.3682 156.633 76.8996 156.633 81.2559C156.633 85.6122 160.061 89.1436 164.291 89.1436Z"
+                                fill="#DADCE0"></path>
+                            <path
+                                d="M84.1885 139.227C112.829 139.074 168.12 137.159 171.872 136.93C177.846 136.623 182.67 133.254 180.449 129.808C178.228 126.362 132.281 127.357 117.041 128.889C118.573 129.425 84.1885 139.227 84.1885 139.227Z"
+                                fill="#DADCE0"></path>
+                            <path
+                                d="M6.07715 109.207C9.6764 117.171 15.1136 124.217 22.1589 129.73C25.5284 132.411 31.5782 134.632 38.3172 136.546C60.4488 142.749 83.8056 142.749 105.937 136.469C112.6 134.632 118.496 132.334 121.866 129.73C128.911 124.217 134.348 117.095 137.948 109.207H79.5172L78.0622 121H30.5827L30.3529 109.207H6.07715Z"
+                                fill="#DADCE0"></path>
+                            <path
+                                d="M71.6296 30.8661C102.081 30.8661 126.767 24.1804 126.767 15.9331C126.767 7.68576 102.081 1 71.6296 1C41.1781 1 16.4922 7.68576 16.4922 15.9331C16.4922 24.1804 41.1781 30.8661 71.6296 30.8661Z"
+                                stroke="#5F6368" stroke-width="2" stroke-miterlimit="10"></path>
+                            <path
+                                d="M126.767 15.9326L140.934 72.6782C146.295 94.1206 138.637 116.712 121.483 130.19C118.113 132.793 112.14 135.091 105.554 136.929C83.4226 143.132 60.3721 141.83 37.9342 137.005C7.68519 130.496 -3.03598 94.1206 2.32461 72.6782L16.4919 15.9326"
+                                stroke="#5F6368" stroke-width="2" stroke-miterlimit="10"></path>
+                            <path
+                                d="M74.5393 120.924H30.1996L27.213 49.5515C27.1364 46.8712 29.2041 44.6504 31.8078 44.6504H71.7824C74.233 44.6504 76.3007 46.6415 76.3772 49.1686L79.2107 116.023C79.2873 118.703 77.143 120.924 74.5393 120.924Z"
+                                stroke="#5F6368" stroke-width="2" stroke-miterlimit="10"></path>
+                            <path d="M26.8303 46.6416L21.4697 121.843H29.5106L26.8303 46.6416Z" fill="#5F6368"></path>
+                            <path
+                                d="M45.2094 91.8999C48.5929 91.8999 51.3358 89.0885 51.3358 85.6204C51.3358 82.1523 48.5929 79.3408 45.2094 79.3408C41.8259 79.3408 39.083 82.1523 39.083 85.6204C39.083 89.0885 41.8259 91.8999 45.2094 91.8999Z"
+                                fill="#5F6368"></path>
+                            <path
+                                d="M45.2094 112.347C48.5929 112.347 51.3358 109.536 51.3358 106.068C51.3358 102.6 48.5929 99.7881 45.2094 99.7881C41.8259 99.7881 39.083 102.6 39.083 106.068C39.083 109.536 41.8259 112.347 45.2094 112.347Z"
+                                fill="#5F6368"></path>
+                            <path
+                                d="M64.3539 91.8999C67.7374 91.8999 70.4803 89.0885 70.4803 85.6204C70.4803 82.1523 67.7374 79.3408 64.3539 79.3408C60.9704 79.3408 58.2275 82.1523 58.2275 85.6204C58.2275 89.0885 60.9704 91.8999 64.3539 91.8999Z"
+                                fill="#5F6368"></path>
+                            <path
+                                d="M64.3539 112.347C67.7374 112.347 70.4803 109.536 70.4803 106.068C70.4803 102.6 67.7374 99.7881 64.3539 99.7881C60.9704 99.7881 58.2275 102.6 58.2275 106.068C58.2275 109.536 60.9704 112.347 64.3539 112.347Z"
+                                fill="#5F6368"></path>
+                            <path
+                                d="M67.7241 72.2193H38.6237C36.939 72.2193 35.5605 70.8408 35.5605 69.1561V54.8357C35.5605 53.1509 36.939 51.7725 38.6237 51.7725H67.7241C69.4088 51.7725 70.7873 53.1509 70.7873 54.8357V69.1561C70.7873 70.8408 69.4088 72.2193 67.7241 72.2193Z"
+                                fill="#5F6368"></path>
+                            <path
+                                d="M92.6885 52.4619C95.2262 52.4619 97.2833 50.3704 97.2833 47.7905C97.2833 45.2106 95.2262 43.1191 92.6885 43.1191C90.1509 43.1191 88.0938 45.2106 88.0938 47.7905C88.0938 50.3704 90.1509 52.4619 92.6885 52.4619Z"
+                                fill="#DADCE0"></path>
+                            <path
+                                d="M122.555 57.2099C125.092 57.2099 127.15 55.1185 127.15 52.5386C127.15 49.9586 125.092 47.8672 122.555 47.8672C120.017 47.8672 117.96 49.9586 117.96 52.5386C117.96 55.1185 120.017 57.2099 122.555 57.2099Z"
+                                fill="#DADCE0"></path>
+                            <path
+                                d="M114.131 43.042C116.669 43.042 118.726 40.9505 118.726 38.3706C118.726 35.7907 116.669 33.6992 114.131 33.6992C111.593 33.6992 109.536 35.7907 109.536 38.3706C109.536 40.9505 111.593 43.042 114.131 43.042Z"
+                                fill="#DADCE0"></path>
+                            <path
+                                d="M124.24 76.5078C124.24 90.9814 112.447 102.775 97.9733 102.775C85.1079 102.775 74.3867 93.5085 72.1659 81.3323C71.7064 78.8052 73.6975 76.5078 76.2246 76.5078H124.24Z"
+                                fill="#1E8E3E" class="VnOHwf-Wvd9Cc"></path>
+                            <path
+                                d="M135.574 79.3413C135.574 80.8729 132.434 82.1747 129.907 82.1747C127.38 82.1747 121.177 80.8729 121.177 79.3413C121.177 77.8097 127.38 76.5078 129.907 76.5078C132.511 76.5078 135.574 77.8097 135.574 79.3413Z"
+                                fill="#1E8E3E" class="VnOHwf-Wvd9Cc"></path>
+                            <path
+                                d="M131.438 69.0793C132.511 70.1514 131.209 73.2912 129.447 75.0525C127.609 76.8905 122.325 80.3365 121.253 79.2644C120.181 78.1923 123.627 72.9083 125.465 71.0704C127.227 69.3091 130.29 68.0072 131.438 69.0793Z"
+                                fill="#1E8E3E" class="VnOHwf-Wvd9Cc"></path>
+                            <path
+                                d="M84.0353 88.2249C86.2769 88.2249 88.094 86.4077 88.094 84.1661C88.094 81.9246 86.2769 80.1074 84.0353 80.1074C81.7937 80.1074 79.9766 81.9246 79.9766 84.1661C79.9766 86.4077 81.7937 88.2249 84.0353 88.2249Z"
+                                fill="white"></path>
+                            <path
+                                d="M92.076 79.265C94.2202 85.6977 93.8373 92.6665 90.7741 98.7163C90.3147 99.7118 91.7697 100.554 92.2291 99.5586C95.4455 93.1259 95.9816 85.6211 93.6842 78.8055C93.3778 77.7334 91.6931 78.1929 92.076 79.265Z"
+                                fill="white"></path>
+                            <path
+                                d="M94.9863 85.2374C95.0629 85.1608 95.216 85.1608 95.2926 85.0842C95.4458 85.0076 95.1394 85.1608 95.2926 85.0842C95.3692 85.0842 95.4458 85.0076 95.5223 85.0076C95.8287 84.931 96.135 84.7779 96.4413 84.7013C97.2837 84.4716 97.6666 84.4716 98.509 84.395C98.8919 84.395 99.2748 84.395 99.6577 84.4716C99.8108 84.4716 99.5811 84.4716 99.8108 84.4716C99.8874 84.4716 99.964 84.4716 100.117 84.5481C100.27 84.6247 100.5 84.6247 100.653 84.7013C101.266 84.8545 101.802 85.2374 102.185 85.6968C102.338 85.9266 102.568 86.3095 102.644 86.5392C102.797 86.9987 102.797 87.305 102.797 87.7645C102.797 88.6069 102.644 89.2961 102.185 89.9853C102.108 90.1385 102.185 89.9853 102.108 90.1385C102.032 90.215 102.032 90.2916 101.955 90.2916C101.878 90.3682 101.572 90.5979 101.572 90.6745C101.419 90.8277 100.96 91.0574 100.653 91.2106C100.577 91.2872 100.653 91.2106 100.653 91.2106C100.577 91.2106 100.577 91.2872 100.5 91.2872C100.423 91.2872 100.347 91.3637 100.194 91.3637C100.041 91.4403 99.8108 91.4403 99.6577 91.5169C99.5045 91.5935 99.2748 91.5935 99.1216 91.5935C99.045 91.5935 99.1216 91.5935 99.1216 91.5935C99.045 91.5935 99.045 91.5935 98.9684 91.5935C98.8919 91.5935 98.7387 91.5935 98.6621 91.5935C98.2026 91.5935 97.8197 91.5935 97.3603 91.5935C97.2837 91.5935 97.2071 91.5935 97.0539 91.5935C96.9008 91.5935 97.0539 91.5935 97.0539 91.5935C96.9774 91.5935 96.9774 91.5935 96.9008 91.5935C96.7476 91.5935 96.5179 91.5169 96.3647 91.4403C96.2116 91.3637 95.9818 91.3637 95.8287 91.2872C95.7521 91.2872 95.6755 91.2106 95.5989 91.2106C95.7521 91.2872 95.5989 91.2106 95.5223 91.2106C95.3692 91.134 95.2926 91.0574 95.1394 90.9808C94.9863 90.9043 95.216 91.0574 95.1394 90.9808C95.0629 90.9043 95.0629 90.9043 94.9863 90.8277C94.2205 89.9853 92.9952 91.2106 93.761 92.053C94.7565 93.1251 96.671 93.4314 98.0495 93.3548C99.8874 93.3548 101.802 92.8188 103.104 91.4403C104.559 89.8321 104.865 87.305 103.946 85.3139C103.104 83.5526 101.189 82.7868 99.3513 82.6336C97.59 82.4805 95.5989 82.7868 94.0673 83.6292C93.1484 84.2418 94.0673 85.7734 94.9863 85.2374Z"
+                                fill="white"></path>
+                            <path
+                                d="M84.0356 86.08C85.0929 86.08 85.9501 85.2228 85.9501 84.1655C85.9501 83.1081 85.0929 82.251 84.0356 82.251C82.9782 82.251 82.1211 83.1081 82.1211 84.1655C82.1211 85.2228 82.9782 86.08 84.0356 86.08Z"
+                                fill="#5F6368"></path>
+                        </svg>
+                        </div>
+                        <h1 class="font-[500] text-center text-[14px]">Seems like no one added <br>in this room yet.</h1>
+                        <a onclick="openaddstudents()" class="hidden md:block text-[13px] font-[500] bg-[#ffffff] text-[#000000 px-[18px] py-[4px] rounded-[20px] w-full sm:w-auto text-center" style="cursor: pointer; border: 1px solid #d3d3d3; overflow: hidden; text-overflow: ellipsis; text-wrap: nowrap;">Add Students</a>
+                    </div>
+                {% endif %}
+            </div>
+
+            
+        </div>
+        
+
+    </div>
+    
+
+                    
+
+    <div id="deleteconfirmation" class=" flex items-center justify-center w-screen h-screen " style="background-color: rgba(0, 0, 0, 0.281); position: fixed; top: 0; left: 0; display: none; z-index: 101;">
+        <div class="w-auto mx-4"> 
+            <div class="mt-4 bg-white flex flex-col px-[20px] py-[17px] min-w-[280px] mx-auto max-w-[420px] rounded-[10px]" style="height: max-content; box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.15);">
+                
+                
+                <div class="flex justify-between font-medium">
+                    <div class="text-[20px]" style="font-weight:600; line-height: normal;">
+                        Delete {{room.roomname}}?
+                    </div>
+                    <div onclick="cancelconfirm()" class="cursor-pointer">   
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M6 6L18 18M6 18L18 6" stroke="black" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="text-[14px] py-[10px] font-[500]" >Are you sure you want to delete this room, all students associated with this room will be removed from this room.</div>
+                <div class="flex gap-2" style="justify-content: flex-end;">
+                    <div onclick="cancelconfirm()" class="rounded-full px-[21px] py-[8px] text-[14px] cursor-pointer flex items-center"  style="background: #F0F0F0; line-height: normal; font-weight: 500;"><p>Nevermind</p></div>
+                    
+                        <form action="{% url 'delete_room' roomname=room.roomname %}" method="post">
+                            {% csrf_token %}
+                            <div  class="rounded-full py-[8px] px-[21px] text-[14px]  text-white cursor-pointer flex items-center"  style="background: #D80000; font-weight: 500;" >
+                                <button type="submit">
+                                    Yes, delete
+                                </button>
+                            </div>
+                        
+                        </form>
+                    
+                </div>
+            </div>
+        </div> 
+    </div>
+
+
+
+
+        <div id="selectdatetoeditattendence" class=" flex items-center justify-center w-screen h-screen" style="background-color: rgba(0, 0, 0, 0.281); position: fixed; top: 0; left: 0; display: none;">
+            <div class="mt-4 bg-white flex flex-col px-[20px] py-[17px] min-w-[280px] mx-auto max-w-[420px] rounded-[10px]" style="height: max-content; box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.15);">
+                
+                
+                <div class="flex justify-between font-medium mb-[15px] gap-[15px]">
+                    <div class="text-[18px]" style="font-weight:600; line-height: normal;">
+                        Edit attendance for date?
+                    </div>
+                    <div onclick="closedate()" class="cursor-pointer">   
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M6 6L18 18M6 18L18 6" stroke="black" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                    </div>
+                </div>
+                <div>
+                    <form action="{% url 'edit_attendance' roomname=room.roomname %}?date={{ selected_date }}" method="post">
+                        {% csrf_token %}
+                        <p class="text-[14px] pb-1">Select a date</p>
+                        <input class="w-full px-2 py-[5px] rounded-[7px] text-[14px]" style="border: 1px solid #d3d3d3; " type="date" placeholder="date" id="attendance_date" name="attendance_date" required max="{{ current_date }}">
+                        <button type="submit" value="Edit Attendance" class="w-full text-center text-[#ffffff] bg-black rounded-[30px] text-[14px] mt-3 py-[7px] px-2">Continue</button>
+                    </form>
+                </div>
+                
+            </div>
+        </div>
+
+
+
+
+        <div id="openaddstudentpopup" class=" flex items-center justify-center w-screen h-screen" style="background-color: rgba(0, 0, 0, 0.281); position: fixed; top: 0; left: 0; display: none; z-index: 101;">
+            <div class="w-full md:w-auto md:mx-4"> 
+                <div class="md:mt-4 bg-white flex flex-col pt-[15px] w-full min-w-[280px] md:min-w-[400px] h-screen md:h-[450px] mx-auto max-w-[420px] md:rounded-[10px] overflow-hidden" style=" box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.15);">
+                    
+                    
+                    <div class="flex flex-col justify-between font-medium px-[20px] " style="border-bottom: 1px solid #d3d3d3;">
+                        <div class="flex justify-between">
+                            <div class="flex flex-col pb-[8px] gap-[4px]">
+                                <div class="text-[20px]" style="font-weight:600; line-height: normal;">
+                                    Select students to add
+                                </div>
+                                <div class="text-[14px]" style="font-weight:400; line-height: normal; color: #696969;">
+                                    Add/Remove students from room {{room.roomname}}
+                                </div>
+                            
+                                
+                                
+                            </div>
+                            <div onclick="closeaddstudents()" class="cursor-pointer">   
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M6 6L18 18M6 18L18 6" stroke="black" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <div class="pb-2">
+                            <input class="px-[10px] py-[6px] rounded-[6px] text-[15px] font-[400] w-full" type="text" id="search" style="outline: none; background: #F0F0F0; width: 100%; " placeholder="Search student" name="query" value="{{ request.GET.query }}">
+                        </div>
+                    </div>
+
+                    <div class="h-full " style="position: relative;" >
+                        <form method="post" class="h-screen">
+                            {% csrf_token %}
+                            
+                                <div class="pb-[50px] h-screen" style="overflow-y: scroll;" id="studentList">
+                                    {% for student in all_students %}
+                                    <div class="flex px-[22px] py-[13px] md:py-[13px] items-center gap-[10px]" style="border-bottom: 1px solid #d3d3d3;" onclick="toggleCheckbox(this)">
+                                        <p class="text-[14px] w-full" style="text-overflow: ellipsis; overflow: hidden; text-wrap: nowrap;" onclick="toggleCheckbox(this)">{{ student.full_name }}</p>
+                                        <input type="checkbox" name="students" value="{{ student.id }}" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                                            {% if student in assigned_students %}checked{% endif %} onclick="event.stopPropagation()">
+                                        
+                                    </div>
+                                    {% endfor %}
+                                    <div class="pt-[280px]"></div>
+                                </div>
+                            
+                            
+                            <div class="flex gap-2 px-[25px] pt-[10px] pb-[10px] bg-white md:pb-[10px] w-full" style="justify-content: flex-end; border-top: 1px solid #d3d3d3; position: fixed; bottom: 0; left: 0;">
+                                <div onclick="closeaddstudents()" class="rounded-full px-[21px] py-[8px] text-[14px] cursor-pointer flex items-center"  style="background: #F0F0F0; line-height: normal; font-weight: 500;"><p>Nevermind</p></div>
+                                        <div  class="rounded-full py-[8px] px-[21px] text-[14px]  text-white cursor-pointer flex items-center"  style="background: #000000; font-weight: 500;" >
+                                            <button type="submit">
+                                                Update Strength
+                                            </button>
+                                        </div>
+
+                            </div>
+                        </form>
+                    </div>
+                    
+                </div>
+            </div> 
+        </div>
+        
+    
+    
+
+
+    <!-- <script>
+        function myFunction() {
+            var x = document.getElementById("menuopen");
+            var y = document.getElementById("menuclose");
+        
+            if (x.style.display === "none") {
+                x.style.display = "flex"; // Show the first element
+                y.style.display = "none"; // Hide the second element
+            } else {
+                x.style.display = "none"; // Hide the first element
+                y.style.display = "flex"; // Show the second element
+            }
+        }
+        </script> -->
+        <script>
+            // Function to set default state based on device width
+            function setDefaultState() {
+                var x = document.getElementById("menuopen");
+                var y = document.getElementById("menuclose");
+            
+                // Check if device width is smaller than 1000px
+                if (window.innerWidth < 650) {
+                    // If smaller, set both elements to display: none
+                    x.style.display = "none";
+                    y.style.display = "none";
+                } else if (window.innerWidth < 1000) {
+                    // If smaller than 1000px but larger than 650px, set menuclose as default
+                    x.style.display = "none";
+                    y.style.display = "flex";
+                } else {
+                    // If larger than or equal to 1000px, set menuopen as default
+                    x.style.display = "flex";
+                    y.style.display = "none";
+                }
+            }
+
+
+
+            function myFunction() {
+                var x = document.getElementById("menuopen");
+                var y = document.getElementById("menuclose");
+                var z = document.getElementById("menumob");
+
+                if (window.innerWidth < 650) {
+                    // If device width is smaller than 650px, only open menumob
+                    x.style.display = "none";
+                    y.style.display = "none";
+                    z.style.display = "flex";
+                } else {
+                    // If device width is 650px or larger, toggle between menuopen and menuclose
+                    if (x.style.display === "none") {
+                        x.style.display = "flex"; // Show the first element
+                        y.style.display = "none"; // Hide the second element
+                    } else {
+                        x.style.display = "none"; // Hide the first element
+                        y.style.display = "flex"; // Show the second element
+                    }
+                }
+            }
+
+            
+            
+            // Call the setDefaultState function when the page loads
+            document.addEventListener("DOMContentLoaded", setDefaultState);
+
+
+            function mobfuncclose() {
+                var zi = document.getElementById("menumob");
+
+                if (zi.style.display === "flex") {
+                        zi.style.display = "none";
+                }
+            }
+            
+            function confirm() {
+                var bi = document.getElementById("deleteconfirmation");
+
+                if (bi.style.display === "none") {
+                        bi.style.display = "flex";
+                }
+            }
+
+            function cancelconfirm() {
+                var bi = document.getElementById("deleteconfirmation");
+
+                if (bi.style.display === "flex") {
+                        bi.style.display = "none";
+                }
+            }
+
+
+            
+            
+            function opendate() {
+                var bi = document.getElementById("selectdatetoeditattendence");
+
+                if (bi.style.display === "none") {
+                        bi.style.display = "flex";
+                }
+            }
+
+            function closedate() {
+                var bi = document.getElementById("selectdatetoeditattendence");
+
+                if (bi.style.display === "flex") {
+                        bi.style.display = "none";
+                }
+            }
+
+
+            function openaddstudents() {
+                var bi = document.getElementById("openaddstudentpopup");
+
+                if (bi.style.display === "none") {
+                        bi.style.display = "flex";
+                }
+            }
+
+            function closeaddstudents() {
+                var bi = document.getElementById("openaddstudentpopup");
+
+                if (bi.style.display === "flex") {
+                        bi.style.display = "none";
+                }
+            }
+
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+            var yyyy = today.getFullYear();
+            today = yyyy + '-' + mm + '-' + dd;
+
+            // Set max attribute of the input date field
+            document.getElementById("attendance_date").setAttribute("max", today);
+            
+            
+            
+            
+            document.getElementById('search').addEventListener('input', function() {
+                let searchTerm = this.value.toLowerCase();
+                let studentList = document.getElementById('studentList');
+                let students = studentList.getElementsByClassName('flex');
+
+                for (let student of students) {
+                    let name = student.getElementsByTagName('p')[0].textContent.toLowerCase();
+                    if (name.includes(searchTerm)) {
+                        student.style.display = 'flex';
+                    } else {
+                        student.style.display = 'none';
+                    }
+                }
+            });
+
+
+            
+            
+
+            function toggleCheckbox(element) {
+                var checkbox = element.querySelector('input[type="checkbox"]');
+                checkbox.checked = !checkbox.checked;
+            }
+            
+            
+            
+            
+            
+            
+            </script>
+            
+            
+            
+{% endblock body %}
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+  
+
+

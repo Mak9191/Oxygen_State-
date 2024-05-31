@@ -1,0 +1,12 @@
+{% autoescape off %}  
+Hi {{ student.full_name }},  
+You fee has be succesfully recorded by us. 
+
+Name: {{ student.full_name }}
+Fee Paid: {{ payment.amount }}
+For room: {{ payment.room.roomname }}
+Date: {{ payment.date }}
+
+
+
+{% endautoescape %}  

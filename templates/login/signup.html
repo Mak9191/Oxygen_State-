@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+   
+    <title>Signup</title>
+</head>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap');
+*{
+    font-family: 'Inter';
+}
+
+html, body {
+    min-height: 100vh;
+    height: 100%;
+    overflow: hidden;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+}
+
+.space10{
+    padding-top: 30px;
+}
+.lb{
+    font-size: 16px;
+    padding: 10px 0 2px 0;
+}
+.inp{
+    width: 100%;
+    height: 36px;
+    background-color: rgb(243, 243, 243);
+    outline: none;
+    border: none;
+    padding-left: 10px;
+    border-radius: 5px ;
+}
+
+.inpbtn{
+    width: 100%;
+    padding: 9px 20px 9px 20px;
+    background-color: #000000;
+    border: none;
+    border-radius: 5px;
+    color: aliceblue;
+    cursor: pointer;
+    border-radius: 40px;
+}
+.inpbtn:hover{
+    background-color: #191919;
+}
+.inp:focus{
+    outline: 2px solid rgb(173, 173, 173);
+}
+
+
+.settler{
+    background-color: rgb(255, 255, 255);
+    width: 382px;
+    padding: 20px 20px 40px 20px;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    border-radius: 10px;
+    transform: translate(-50%, -50%);
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.07);
+}
+
+.logotitle{
+    text-align: center;
+    font-size: 28px;
+    font-family: 'Montserrat';
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+
+
+.signupcontainer{
+    width: 100%;
+    height: 100vh;
+
+}
+.link{
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 14px;
+}
+.link a{
+    color: #333333;
+}
+
+.link1{
+        position: absolute;
+        top: 10px;
+        left: 20px;
+        
+    }
+
+    .link1 a{
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: 500;
+            font-family: 'Montserrat';
+    }
+
+    .link2{
+        display: none;
+    }
+
+    .link4{
+        display: none;
+    }
+
+.terms{
+    text-align: center;
+    font-size: 13px;
+}
+
+@media screen and (max-width: 700px) {
+  .settler {
+    width: 100%;
+  }
+  .signupcontainer {
+    width: 100%;
+    height: 100vh;
+  }
+  .settler{
+    background-color: rgb(255, 255, 255);
+    width: 100%;
+    padding: 20px 20px 40px 20px;
+    position: relative;
+    box-shadow: none;
+
+    }
+    .link1{
+        text-align: center;
+        margin: 0 auto;
+        width: 100%;
+        top: 20px;
+        font-size: 36px;
+        display: none;
+        
+    }
+    .link1 a{
+        text-align: center;
+    }
+    .link{
+        display: none;
+    }
+    .link2{
+        display: block;
+        margin: 0 auto;
+        text-align: center;
+        text-decoration: none;
+        font-size: 44px;
+        font-family: 'Montserrat';
+        font-weight: 700;
+        padding-bottom: 20px;
+    }
+    .link2 a{
+        text-decoration: none;
+        display: none;
+    }
+    .logotitle{
+        font-size: 30px;
+    }
+    .lb{
+        font-size: 18px;
+    }
+    .inp{
+        height: 40px;
+        font-size: 18px;
+    }
+    .link4{
+        padding-top: 20px;
+        display: block;
+        text-align: center;
+        font-size: 16px;
+    }
+}
+
+</style>
+
+
+<body>
+{% block body %}
+
+
+<div class="container">
+    
+    <div class="signupcontainer" style="background-image: url('https://images.mykidreports.com/WebPage/43928552347605-02-1-1712684625.png'); background-size: cover;background-position: center;">
+        <div class="link">Already have an account? <a href="{% url 'login' %}">Login here</a></div>
+        <div class="link1"><a href="{% url 'signup' %}">OxygenState</a></div>
+        <div class="settler">
+            <div class="link2"><a href="{% url 'signup' %}">OxygenState</a></div>
+            <div class="logotitle">Signup to OxygenState</div>
+            
+            <form method="post" action="signup" class="frm" >
+                {% csrf_token %}
+                {% for field in form %}
+                <p>
+                {% if field.help_text %}
+                <small style="color: grey; visibility: hidden; display: none;">{{ field.help_text }}</small>
+                {% endif %}
+                {% for error in field.errors %}
+                <p style="color: red">{{ error }}</p>
+                {% endfor %}
+                </p>
+                {% endfor %}
+                <div class="lb">Username</div>
+                <input type="text" name="username" maxlength="150" minlength="5" autofocus="" required="" id="id_username" class="inp">
+
+                <div class="lb">Email</div>
+                <input type="email" name="email" required="" id="id_email" class="inp">
+                
+                <div class="lb">Password</div>
+                <input type="password" name="password1" required="" id="id_password1" class="inp">
+                
+                <div class="lb">Confirm password</div>
+                <input type="password" name="password2" required="" id="id_password2" class="inp">
+
+                <div class="space10"></div>
+                
+                <input type="submit" value="Create Account" class="inpbtn">
+                <div class="link4">Already have an account? <a href="{% url 'login' %}">Login here</a></div>
+               
+                
+        </form>
+        </div>
+    </div>
+        
+       
+</div>    
+    
+    
+    
+    
+    
+    
+    
+{% endblock body %}
+</body>
+</html>

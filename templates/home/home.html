@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" /> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+   
+    <title>Rooms | OxygenState</title>
+</head>
+<style>
+    *{
+        font-family: 'Inter';
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+        margin-left: 5px;
+        border-radius: 20px;
+        width: 7px; /* Adjust according to scrollbar width */
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        margin-left: 5px;
+        background: #eeeeee; /* Match container background color */
+        border-radius: 20px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: #bcbcbc; /* Hide scrollbar thumb */
+        border-radius: 20px;
+    }
+</style>
+<body>
+    {% block body %}
+    <!-- navigation bar start -->
+    <section class="flex py-[10px] bg-[#ffffff] px-[16px] justify-between items-center border-b border-[#d3d3d3] z-2 w-full" style="position: fixed; top: 0; z-index: 5;">
+    <div class="logocover flex items-center gap-[16px]">
+        
+        <svg id="toggleBtn" onclick="myFunction()"  class="hover:bg-[#efefef] rounded-[8px] cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <path d="M26.0002 24.5C26.2551 24.5003 26.5003 24.5979 26.6856 24.7728C26.8709 24.9478 26.9825 25.187 26.9974 25.4414C27.0124 25.6958 26.9296 25.9464 26.766 26.1418C26.6024 26.3373 26.3703 26.4629 26.1172 26.493L26.0002 26.5H10.0002C9.74536 26.4997 9.50021 26.4021 9.31488 26.2272C9.12954 26.0522 9.01801 25.813 9.00307 25.5586C8.98813 25.3042 9.07092 25.0536 9.23451 24.8582C9.3981 24.6627 9.63015 24.5371 9.88324 24.507L10.0002 24.5H26.0002ZM26.0002 17.5C26.2655 17.5 26.5198 17.6054 26.7074 17.7929C26.8949 17.9804 27.0002 18.2348 27.0002 18.5C27.0002 18.7652 26.8949 19.0196 26.7074 19.2071C26.5198 19.3946 26.2655 19.5 26.0002 19.5H10.0002C9.73503 19.5 9.48067 19.3946 9.29314 19.2071C9.1056 19.0196 9.00024 18.7652 9.00024 18.5C9.00024 18.2348 9.1056 17.9804 9.29314 17.7929C9.48067 17.6054 9.73503 17.5 10.0002 17.5H26.0002ZM26.0002 10.5C26.2655 10.5 26.5198 10.6054 26.7074 10.7929C26.8949 10.9804 27.0002 11.2348 27.0002 11.5C27.0002 11.7652 26.8949 12.0196 26.7074 12.2071C26.5198 12.3946 26.2655 12.5 26.0002 12.5H10.0002C9.73503 12.5 9.48067 12.3946 9.29314 12.2071C9.1056 12.0196 9.00024 11.7652 9.00024 11.5C9.00024 11.2348 9.1056 10.9804 9.29314 10.7929C9.48067 10.6054 9.73503 10.5 10.0002 10.5H26.0002Z" fill="black"/>
+        </svg>
+        <h1 class="text-[#000000] font-[500] text-[20px]" style="font-family: 'Montserrat';">OxygenState</h1>
+    </div>
+    <a href="{% url 'signout' %}">
+        <div class="logout-container flex justify-center items-center gap-[10px] px-[10px] sm:px-[15px] py-[5px] bg-[#ffffff] hover:bg-[#efefef] rounded-[20px] cursor-pointer" >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M17 7L15.59 8.41L18.17 11H8V13H18.17L15.59 15.58L17 17L22 12L17 7ZM4 5H12V3H4C2.9 3 2 3.9 2 5V19C2 20.1 2.9 21 4 21H12V19H4V5Z" fill="black"/>
+            </svg>
+            <p class="p-0 m-0 text-[#000000] text-[15px] font-[500] hidden sm:flex">Logout</p>
+        </div>
+    </a>
+    </section>
+    <!-- navigation bar end -->
+    <div class="parent-container flex flex-1 flex-grow-1 flex-shrink-1 flex-basis-0" style="align-items: flex-start; align-self: stretch;">
+        <div id="menuopen" class="side-menu flex min-w-[220px] flex-col md:flex pt-[57px]" style="height: 100vh; align-items: flex-start; align-self: stretch; border-right: 1px solid #d3d3d3; position: sticky; top: 0;">
+            <div class="side-menu-cont1 flex flex-col items-center w-full px-[12px] py-[10px] flex-1 flex-grow-1 flex-shrink-1 flex-basis-0" style="align-items: flex-start; align-self: stretch;">
+                
+                <a href="{% url 'home' %}" class="w-full">
+                    <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M20 19V10.5C20 10.3448 19.9639 10.1916 19.8944 10.0528C19.825 9.91393 19.7242 9.79315 19.6 9.7L12.6 4.45C12.4269 4.32018 12.2164 4.25 12 4.25C11.7836 4.25 11.5731 4.32018 11.4 4.45L4.4 9.7C4.2758 9.79315 4.175 9.91393 4.10557 10.0528C4.03614 10.1916 4 10.3448 4 10.5V19C4 19.2652 4.10536 19.5196 4.29289 19.7071C4.48043 19.8946 4.73478 20 5 20H9C9.26522 20 9.51957 19.8946 9.70711 19.7071C9.89464 19.5196 10 19.2652 10 19V16C10 15.7348 10.1054 15.4804 10.2929 15.2929C10.4804 15.1054 10.7348 15 11 15H13C13.2652 15 13.5196 15.1054 13.7071 15.2929C13.8946 15.4804 14 15.7348 14 16V19C14 19.2652 14.1054 19.5196 14.2929 19.7071C14.4804 19.8946 14.7348 20 15 20H19C19.2652 20 19.5196 19.8946 19.7071 19.7071C19.8946 19.5196 20 19.2652 20 19Z" stroke="black" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M4 18L4.5 20H9.5L10 19L10.5 15H14V19L15 20H19L20 19V10L12 4L4 10V18Z" fill="black" stroke="black"/>
+                        </svg>
+                        <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        -webkit-box-orient: vertical; overflow: hidden;
+                        -webkit-line-clamp: 1;">Home</h1>
+                    </div>
+                </a>
+
+                <a href="{% url 'students' %}" class="w-full">
+                    <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M18.5391 12.4805C18.8594 13.043 19.0977 13.6289 19.2539 14.2383C19.4102 14.8477 19.4922 15.4766 19.5 16.125V17.332L12 21.0938L4.5 17.332C4.5 16.8633 4.50391 16.4258 4.51172 16.0195C4.51953 15.6133 4.55469 15.2188 4.61719 14.8359C4.67969 14.4531 4.77344 14.0703 4.89844 13.6875C5.02344 13.3047 5.21094 12.9023 5.46094 12.4805L3 11.25V18.1289C3.22656 18.207 3.42969 18.3164 3.60938 18.457C3.78906 18.5977 3.94922 18.7617 4.08984 18.9492C4.23047 19.1367 4.33203 19.3398 4.39453 19.5586C4.45703 19.7773 4.49219 20.0078 4.5 20.25V24H0V20.25C0 20.0156 0.0351562 19.7891 0.105469 19.5703C0.175781 19.3516 0.277344 19.1445 0.410156 18.9492C0.542969 18.7539 0.699219 18.5898 0.878906 18.457C1.05859 18.3242 1.26562 18.2148 1.5 18.1289V10.5L0 9.75L12 3.75L24 9.75L18.5391 12.4805ZM3 20.25C3 20.0469 2.92578 19.8711 2.77734 19.7227C2.62891 19.5742 2.45312 19.5 2.25 19.5C2.04688 19.5 1.87109 19.5742 1.72266 19.7227C1.57422 19.8711 1.5 20.0469 1.5 20.25V22.5H3V20.25ZM3.35156 9.75L12 14.0742L20.6484 9.75L12 5.42578L3.35156 9.75ZM18 16.4062C18 15.8047 17.9414 15.2461 17.8242 14.7305C17.707 14.2148 17.5 13.6875 17.2031 13.1484L12 15.75L6.79688 13.1484C6.53906 13.6016 6.34375 14.0781 6.21094 14.5781C6.07812 15.0781 6.00781 15.5938 6 16.125V16.4062L12 19.4062L18 16.4062Z" fill="black"/>
+                        </svg>
+                        <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        -webkit-box-orient: vertical; overflow: hidden;
+                        -webkit-line-clamp: 1;">Students</h1>
+                    </div>
+                </a>
+
+
+                
+                <a href="{% url 'rooms' %}" class="w-full">
+                    <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M4 4H5.71429V20H4V4ZM10 7.2H17V8.8H10V7.2ZM10 10.4L17 10.5V12H10V10.4Z" fill="black"/>
+                            <path d="M18.2667 4H7V20H18.2667C19.2226 20 20 19.2824 20 18.4V5.6C20 4.7176 19.2226 4 18.2667 4ZM18.2667 18.4H8.73333V5.6H18.2667V18.4Z" fill="black"/>
+                        </svg>
+                        <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        -webkit-box-orient: vertical; overflow: hidden;
+                        -webkit-line-clamp: 1;">Rooms</h1>
+                    </div>
+                 </a>
+
+
+
+                 <a href="{% url 'paymentinfo' %}" class="w-full">
+                    <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M13.66 7C13.1 5.82 11.9 5 10.5 5H6V3H18V5H14.74C15.22 5.58 15.58 6.26 15.79 7H18V9H15.98C15.73 11.8 13.37 14 10.5 14H9.77L16.5 21H13.73L7 14V12H10.5C12.26 12 13.72 10.7 13.96 9H6V7H13.66Z" fill="black"/>
+                        </svg>
+                        <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        -webkit-box-orient: vertical; overflow: hidden;
+                        -webkit-line-clamp: 1;">Payment Info</h1>
+                    </div>
+                 </a>
+                
+            </div>
+        </div>
+
+
+        <div id="menuclose" class="side-menu-collapsed flex w-auto flex-col md:flex pt-[57px]" style="display: none; height: 100vh; align-items: flex-start; align-self: stretch; border-right: 1px solid #d3d3d3; position: sticky; top:0;">
+            <div class="side-menu-cont1 flex flex-col items-center w-full px-[12px] py-[10px] flex-1 flex-grow-1 flex-shrink-1 flex-basis-0" style="align-items: flex-start; align-self: stretch;">
+                <a href="{% url 'home' %}">
+                <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M20 19V10.5C20 10.3448 19.9639 10.1916 19.8944 10.0528C19.825 9.91393 19.7242 9.79315 19.6 9.7L12.6 4.45C12.4269 4.32018 12.2164 4.25 12 4.25C11.7836 4.25 11.5731 4.32018 11.4 4.45L4.4 9.7C4.2758 9.79315 4.175 9.91393 4.10557 10.0528C4.03614 10.1916 4 10.3448 4 10.5V19C4 19.2652 4.10536 19.5196 4.29289 19.7071C4.48043 19.8946 4.73478 20 5 20H9C9.26522 20 9.51957 19.8946 9.70711 19.7071C9.89464 19.5196 10 19.2652 10 19V16C10 15.7348 10.1054 15.4804 10.2929 15.2929C10.4804 15.1054 10.7348 15 11 15H13C13.2652 15 13.5196 15.1054 13.7071 15.2929C13.8946 15.4804 14 15.7348 14 16V19C14 19.2652 14.1054 19.5196 14.2929 19.7071C14.4804 19.8946 14.7348 20 15 20H19C19.2652 20 19.5196 19.8946 19.7071 19.7071C19.8946 19.5196 20 19.2652 20 19Z" stroke="black" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M4 18L4.5 20H9.5L10 19L10.5 15H14V19L15 20H19L20 19V10L12 4L4 10V18Z" fill="black" stroke="black"/>
+                    </svg>
+                    <!-- <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    -webkit-box-orient: vertical; overflow: hidden;
+                    -webkit-line-clamp: 1;">Home</h1> -->
+                </div>
+                </a>
+
+                <a href="{% url 'students' %}">
+                <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M18.5391 12.4805C18.8594 13.043 19.0977 13.6289 19.2539 14.2383C19.4102 14.8477 19.4922 15.4766 19.5 16.125V17.332L12 21.0938L4.5 17.332C4.5 16.8633 4.50391 16.4258 4.51172 16.0195C4.51953 15.6133 4.55469 15.2188 4.61719 14.8359C4.67969 14.4531 4.77344 14.0703 4.89844 13.6875C5.02344 13.3047 5.21094 12.9023 5.46094 12.4805L3 11.25V18.1289C3.22656 18.207 3.42969 18.3164 3.60938 18.457C3.78906 18.5977 3.94922 18.7617 4.08984 18.9492C4.23047 19.1367 4.33203 19.3398 4.39453 19.5586C4.45703 19.7773 4.49219 20.0078 4.5 20.25V24H0V20.25C0 20.0156 0.0351562 19.7891 0.105469 19.5703C0.175781 19.3516 0.277344 19.1445 0.410156 18.9492C0.542969 18.7539 0.699219 18.5898 0.878906 18.457C1.05859 18.3242 1.26562 18.2148 1.5 18.1289V10.5L0 9.75L12 3.75L24 9.75L18.5391 12.4805ZM3 20.25C3 20.0469 2.92578 19.8711 2.77734 19.7227C2.62891 19.5742 2.45312 19.5 2.25 19.5C2.04688 19.5 1.87109 19.5742 1.72266 19.7227C1.57422 19.8711 1.5 20.0469 1.5 20.25V22.5H3V20.25ZM3.35156 9.75L12 14.0742L20.6484 9.75L12 5.42578L3.35156 9.75ZM18 16.4062C18 15.8047 17.9414 15.2461 17.8242 14.7305C17.707 14.2148 17.5 13.6875 17.2031 13.1484L12 15.75L6.79688 13.1484C6.53906 13.6016 6.34375 14.0781 6.21094 14.5781C6.07812 15.0781 6.00781 15.5938 6 16.125V16.4062L12 19.4062L18 16.4062Z" fill="black"/>
+                    </svg>
+                    <!-- <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    -webkit-box-orient: vertical; overflow: hidden;
+                    -webkit-line-clamp: 1;">Students</h1> -->
+                </div>
+                </a>
+
+                <a href="{% url 'rooms' %}">
+                <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M4 4H5.71429V20H4V4ZM10 7.2H17V8.8H10V7.2ZM10 10.4L17 10.5V12H10V10.4Z" fill="black"/>
+                        <path d="M18.2667 4H7V20H18.2667C19.2226 20 20 19.2824 20 18.4V5.6C20 4.7176 19.2226 4 18.2667 4ZM18.2667 18.4H8.73333V5.6H18.2667V18.4Z" fill="black"/>
+                    </svg>
+                    <!-- <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    -webkit-box-orient: vertical; overflow: hidden;
+                    -webkit-line-clamp: 1;">Rooms</h1> -->
+                </div>
+                </a>
+
+                
+
+                <a href="{% url 'paymentinfo' %}">
+                    <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M13.66 7C13.1 5.82 11.9 5 10.5 5H6V3H18V5H14.74C15.22 5.58 15.58 6.26 15.79 7H18V9H15.98C15.73 11.8 13.37 14 10.5 14H9.77L16.5 21H13.73L7 14V12H10.5C12.26 12 13.72 10.7 13.96 9H6V7H13.66Z" fill="black"/>
+                        </svg>
+                        <!-- <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        -webkit-box-orient: vertical; overflow: hidden;
+                        -webkit-line-clamp: 1;">Rooms</h1> -->
+                    </div>
+                    </a>
+            </div>
+        </div>
+
+        <div id="menumob" class="side-menu flex min-w-[275px] bg-[#ffffff] flex-col md:flex z-3" style="display: none; height: 100vh; align-items: flex-start; align-self: stretch; border-right: 1px solid #d3d3d3; position: fixed; top: 0; left: 0; z-index: 10;">
+            <div class="side-menu-cont1 flex flex-col items-center w-full px-[12px] py-[10px] flex-1 flex-grow-1 flex-shrink-1 flex-basis-0" style="align-items: flex-start; align-self: stretch;">
+                <div class="menuitems flex items-center gap-[20px] w-auto px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                    <svg onclick="mobfuncclose()" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 5L19 19M5 19L19 5" stroke="black" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    
+                </div>
+
+                <a href="{% url 'home' %}" class="w-full">
+                <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M20 19V10.5C20 10.3448 19.9639 10.1916 19.8944 10.0528C19.825 9.91393 19.7242 9.79315 19.6 9.7L12.6 4.45C12.4269 4.32018 12.2164 4.25 12 4.25C11.7836 4.25 11.5731 4.32018 11.4 4.45L4.4 9.7C4.2758 9.79315 4.175 9.91393 4.10557 10.0528C4.03614 10.1916 4 10.3448 4 10.5V19C4 19.2652 4.10536 19.5196 4.29289 19.7071C4.48043 19.8946 4.73478 20 5 20H9C9.26522 20 9.51957 19.8946 9.70711 19.7071C9.89464 19.5196 10 19.2652 10 19V16C10 15.7348 10.1054 15.4804 10.2929 15.2929C10.4804 15.1054 10.7348 15 11 15H13C13.2652 15 13.5196 15.1054 13.7071 15.2929C13.8946 15.4804 14 15.7348 14 16V19C14 19.2652 14.1054 19.5196 14.2929 19.7071C14.4804 19.8946 14.7348 20 15 20H19C19.2652 20 19.5196 19.8946 19.7071 19.7071C19.8946 19.5196 20 19.2652 20 19Z" stroke="black" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M4 18L4.5 20H9.5L10 19L10.5 15H14V19L15 20H19L20 19V10L12 4L4 10V18Z" fill="black" stroke="black"/>
+                    </svg>
+                    <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    -webkit-box-orient: vertical; overflow: hidden;
+                    -webkit-line-clamp: 1;">Home</h1>
+                </div>
+                </a>
+
+                <a href="{% url 'students' %}" class="w-full">
+                <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M18.5391 12.4805C18.8594 13.043 19.0977 13.6289 19.2539 14.2383C19.4102 14.8477 19.4922 15.4766 19.5 16.125V17.332L12 21.0938L4.5 17.332C4.5 16.8633 4.50391 16.4258 4.51172 16.0195C4.51953 15.6133 4.55469 15.2188 4.61719 14.8359C4.67969 14.4531 4.77344 14.0703 4.89844 13.6875C5.02344 13.3047 5.21094 12.9023 5.46094 12.4805L3 11.25V18.1289C3.22656 18.207 3.42969 18.3164 3.60938 18.457C3.78906 18.5977 3.94922 18.7617 4.08984 18.9492C4.23047 19.1367 4.33203 19.3398 4.39453 19.5586C4.45703 19.7773 4.49219 20.0078 4.5 20.25V24H0V20.25C0 20.0156 0.0351562 19.7891 0.105469 19.5703C0.175781 19.3516 0.277344 19.1445 0.410156 18.9492C0.542969 18.7539 0.699219 18.5898 0.878906 18.457C1.05859 18.3242 1.26562 18.2148 1.5 18.1289V10.5L0 9.75L12 3.75L24 9.75L18.5391 12.4805ZM3 20.25C3 20.0469 2.92578 19.8711 2.77734 19.7227C2.62891 19.5742 2.45312 19.5 2.25 19.5C2.04688 19.5 1.87109 19.5742 1.72266 19.7227C1.57422 19.8711 1.5 20.0469 1.5 20.25V22.5H3V20.25ZM3.35156 9.75L12 14.0742L20.6484 9.75L12 5.42578L3.35156 9.75ZM18 16.4062C18 15.8047 17.9414 15.2461 17.8242 14.7305C17.707 14.2148 17.5 13.6875 17.2031 13.1484L12 15.75L6.79688 13.1484C6.53906 13.6016 6.34375 14.0781 6.21094 14.5781C6.07812 15.0781 6.00781 15.5938 6 16.125V16.4062L12 19.4062L18 16.4062Z" fill="black"/>
+                    </svg>
+                    <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    -webkit-box-orient: vertical; overflow: hidden;
+                    -webkit-line-clamp: 1;">Students</h1>
+                </div>
+                </a>
+
+                <a href="{% url 'rooms' %}" class="w-full">
+                <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M4 4H5.71429V20H4V4ZM10 7.2H17V8.8H10V7.2ZM10 10.4L17 10.5V12H10V10.4Z" fill="black"/>
+                        <path d="M18.2667 4H7V20H18.2667C19.2226 20 20 19.2824 20 18.4V5.6C20 4.7176 19.2226 4 18.2667 4ZM18.2667 18.4H8.73333V5.6H18.2667V18.4Z" fill="black"/>
+                    </svg>
+                    <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    -webkit-box-orient: vertical; overflow: hidden;
+                    -webkit-line-clamp: 1;">Rooms</h1>
+                </div>
+                </a>
+                
+                <a href="{% url 'paymentinfo' %}" class="w-full">
+                    <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M13.66 7C13.1 5.82 11.9 5 10.5 5H6V3H18V5H14.74C15.22 5.58 15.58 6.26 15.79 7H18V9H15.98C15.73 11.8 13.37 14 10.5 14H9.77L16.5 21H13.73L7 14V12H10.5C12.26 12 13.72 10.7 13.96 9H6V7H13.66Z" fill="black"/>
+                        </svg>
+                        <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        -webkit-box-orient: vertical; overflow: hidden;
+                        -webkit-line-clamp: 1;">Payment Info</h1>
+                    </div>
+                 </a>
+            </div>
+        </div>
+
+        <div class="content-container flex w-full bg-[#ffffff] px-[15px] sm:px-[25px] md:px-[45px] pt-[80px] md:pt-[87px] pb-[10px] flex-col gap-[20px] sm:gap-[35px]">
+            
+            
+            <h1 class="text-[18px] sm:text-[20px] md:text-[24px] font-[500] text-[#000000]">Dashboard</h1>
+            
+            
+
+
+            <div class=" flex gap-[15px] flex-col md:flex-row" style="display: flex;">
+                
+                
+                <div class="order-3 md:order-none flex w-full w-full rounded-[10px] p-[15px] flex-col gap-[10px]" style="border: 1px solid #d3d3d3;">
+                    <div class="flex flex-col gap-[5px] w-full " style="align-items: flex-start;">
+                        <p class="font-[500] text-[14px] w-full">Number of due payments for month 
+                            {% if current_month == 1 %}
+                                                    Jan
+                                                    {% elif current_month == 2 %}
+                                                    Feb
+                                                    {% elif current_month == 3 %}
+                                                    Mar
+                                                    {% elif current_month == 4 %}
+                                                    Apr
+                                                    {% elif current_month == 5 %}
+                                                    May
+                                                    {% elif current_month == 6 %}
+                                                    Jun
+                                                    {% elif current_month == 7 %}
+                                                    Jul
+                                                    {% elif current_month == 8 %}
+                                                    Aug
+                                                    {% elif current_month == 9 %}
+                                                    Sep
+                                                    {% elif current_month == 10 %}
+                                                    Oct
+                                                    {%elif current_month == 11 %}
+                                                    Nov
+                                                    {% elif current_month == 12 %}
+                                                    Dec
+                                                    {% endif %}
+                        </p>
+                        <div class="flex w-full flex-col gap-[7px] pt-[10px] md:max-h-[190px] md:overflow-y-scroll custom-scrollbar rounded-[5px] md:px-[8px] md:border border-[#d3d3d3] ">
+                            {% for room_name, unpaid_count in room_unpaid_counts.items %}
+                            <a href="#" class="w-auto hover:bg-[#F0F0F0] rounded-[5px]">
+                                <div class="flex w-full px-3 py-[4px] rounded-[5px]" style="border: 1px solid #d3d3d3;">
+                                    <p class="w-full text-[14px]">{{ room_name }}</p>
+                                    <p class="w-auto text-[14px]">{{unpaid_count}}</p>
+                                </div>
+                            </a>
+                            {% endfor %}
+                        </div>
+                        <div class="flex w-full pt-[8px]">
+                            <a href="#" class="px-[15px] py-[7px] text-[14px] rounded-[40px] font-[500] text-black bg-[#F0F0F0] hover:bg-[#D9D9D9]">View All Due Payments</a>
+                        </div>
+                    </div>
+                    <div style="width: 100%; border-top: 1px solid #d3d3d3;"></div>
+                    <p class="w-full text-[14px]" style="overflow: hidden; text-overflow: ellipsis; text-wrap: nowrap;">Total amount received in {% if current_month == 1 %}
+                        Jan
+                        {% elif current_month == 2 %}
+                        Feb
+                        {% elif current_month == 3 %}
+                        Mar
+                        {% elif current_month == 4 %}
+                        Apr
+                        {% elif current_month == 5 %}
+                        May
+                        {% elif current_month == 6 %}
+                        Jun
+                        {% elif current_month == 7 %}
+                        Jul
+                        {% elif current_month == 8 %}
+                        Aug
+                        {% elif current_month == 9 %}
+                        Sep
+                        {% elif current_month == 10 %}
+                        Oct
+                        {%elif current_month == 11 %}
+                        Nov
+                        {% elif current_month == 12 %}
+                        Dec
+                        {% endif %}
+                        : <span class="font-[600] text-[#00A52E]">₹{{total_payment_current_month}}.00</span></p>
+                    
+                </div>
+
+
+                <a href="{% url 'students' %}" class="w-full max-w-[100%] h-auto">
+                <div class="order-2 md:order-none flex w-full w-full rounded-[10px] p-[15px]" style="border: 1px solid #d3d3d3;">
+                    <div class="flex flex-col gap-[5px] w-full" style="align-items: flex-start;">
+                        <p class="font-[500] text-[14px] w-full">Students</p>
+                        <p class="font-[500] text-[32px] w-full">{{ total_students }}</p>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
+                        <path d="M15.5 30.9997C24.0604 30.9997 31 24.0602 31 15.4999C31 6.93952 24.0604 0 15.5 0C6.93959 0 0 6.93952 0 15.4999C0 24.0602 6.93959 30.9997 15.5 30.9997Z" fill="#59AA76"/>
+                        <path d="M28.113 24.475L24.3683 20.0327L6.02261 23.8254L12.9946 30.7973C13.8103 30.93 14.6469 31 15.5 31C20.8889 30.9999 25.3355 28.648 28.113 24.475Z" fill="#3D955C"/>
+                        <path d="M25.6003 23.4802V22.1544C25.6003 19.4309 20.7303 18.6825 20.7303 18.6825L15.8562 18.6785L10.9582 18.6825C10.9582 18.6825 6.06334 19.4309 6.06334 22.1544V23.4802C6.06334 23.4802 6.04187 24.4836 7.61862 24.5194C9.19537 24.5552 15.8455 24.5194 15.8455 24.5194C15.8455 24.5194 22.4878 24.5552 24.0646 24.5194C25.6413 24.4836 25.6003 23.4802 25.6003 23.4802Z" fill="#C0E1CF"/>
+                        <path d="M17.6763 18.6553H15.8572L10.9178 18.6708C10.9178 18.6708 5.98148 19.4308 5.98148 22.1543V23.4801C5.98148 23.4801 6.00102 24.4835 7.57777 24.5193C9.15452 24.5551 9.17924 24.5045 9.17924 24.5045L14.002 20.8758H17.6765V18.6553H17.6763Z" fill="#AACBBC"/>
+                        <path d="M18.8314 15.6323H12.847V19.3591H18.8314V15.6323Z" fill="#C7928E"/>
+                        <path d="M21.4831 10.5246C21.4831 10.5246 21.9696 12.8012 20.1931 14.1628V10.0776L21.4831 10.5246Z" fill="#333333"/>
+                        <path d="M10.0207 10.5246C10.0207 10.5246 9.68226 12.8012 11.3107 14.1628V10.0776L10.0207 10.5246Z" fill="#333333"/>
+                        <path d="M11.3419 10.1138V14.2707C11.3419 14.2707 12.3437 17.8542 15.8742 17.8542C19.4048 17.8542 20.3724 14.199 20.3724 14.199V10.4005C20.3724 10.4005 20.5858 4.9895 15.8742 4.9895C11.1626 4.9895 11.3419 10.1138 11.3419 10.1138Z" fill="#FECCCB"/>
+                        <path d="M15.8751 17.8538C12.3632 17.8538 11.3598 14.2703 11.3598 14.2703V10.1134C11.3598 10.1134 11.1807 4.98901 15.8751 4.98901V17.8538Z" fill="#D8AEAF"/>
+                        <path d="M13.9221 7.92775C13.9221 7.92775 14.6745 10.9379 21.6625 10.9379C21.6625 10.9379 21.5534 4.91772 15.8744 4.91772C10.1954 4.91772 10.0161 10.9379 10.0161 10.9379C10.0161 10.9379 12.3811 10.2928 13.9221 7.92775Z" fill="#2B2B2B"/>
+                        <path d="M12.8193 16.7141L10.9545 18.6506L13.9924 20.9087L15.9289 19.3936L12.8193 16.7141Z" fill="#B6D5D0"/>
+                        <path d="M18.8301 16.7141L20.6949 18.6506L17.657 20.9087L15.7206 19.3936L18.8301 16.7141Z" fill="#B6D5D0"/>
+                        </svg>
+                </div>
+                </a>
+
+                <!-- <a href="{% url 'paymentinfo' %}" class="w-full  max-w-[100%]">
+                <div class="flex w-full w-full rounded-[10px] p-[15px]" style="border: 1px solid #d3d3d3;">
+                    <div class="flex flex-col gap-[5px] w-full" style="align-items: flex-start;">
+                        <p class="font-[500] text-[14px] w-full">Total Payment Recorded this Month</p>
+                        <p class="font-[500] text-[32px] w-full">{{ total_payment_current_month }}</p>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="31" height="32" viewBox="0 0 31 32" fill="none">
+                        <path d="M15.4999 30.9998C24.0603 30.9998 30.9999 24.0603 30.9999 15.4999C30.9999 6.93955 24.0603 0 15.4999 0C6.93955 0 0 6.93955 0 15.4999C0 24.0603 6.93955 30.9998 15.4999 30.9998Z" fill="#FACC39"/>
+                        <path d="M30.9577 14.3531L25.2559 8.6355L6.19462 20.3856V22.1131H3.49591L3.39554 22.1326L12.0311 30.5373C13.1829 30.9013 13.6894 31.0101 15.5001 31.0101C24.0605 31.0101 31 24.0653 31 15.5049C31 15.1194 30.9854 14.7318 30.9577 14.3531Z" fill="#EFBF3A"/>
+                        <path d="M24.8472 9.08618H6.04645V21.2252H24.8472V9.08618Z" fill="#00ADBB"/>
+                        <path d="M3.21271 21.6646V22.0497C3.21271 22.0497 3.55941 22.4349 4.36828 22.4349C5.17716 22.4349 26.9013 22.4349 26.9013 22.4349C26.9013 22.4349 27.5176 22.2423 27.7872 22.0497V21.6646H3.21271Z" fill="#E6E6E6"/>
+                        <path d="M5.82571 8.56799C5.83158 8.56417 5.83789 8.56065 5.8442 8.55713C5.83789 8.5605 5.83188 8.56432 5.82571 8.56799Z" fill="#929397"/>
+                        <path d="M5.64185 21.3044C5.64097 21.2904 5.63934 21.2772 5.63934 21.262C5.63934 21.2764 5.64038 21.2906 5.64185 21.3044Z" fill="#929397"/>
+                        <path d="M5.97568 8.51584C5.99131 8.51407 6.00724 8.51245 6.02436 8.51245C6.00783 8.51245 5.99161 8.51378 5.97568 8.51584Z" fill="#929397"/>
+                        <path d="M24.9755 8.51245H10.3861L11.2926 9.35982H24.5903V20.8767H23.6122L24.4363 21.647H24.9756C25.1884 21.647 25.3608 21.4746 25.3608 21.2618V8.8975C25.3607 8.68477 25.1882 8.51245 24.9755 8.51245Z" fill="#333333"/>
+                        <path d="M5.81729 8.57324C5.71041 8.64164 5.6395 8.76125 5.6395 8.89744C5.6395 8.89744 5.66111 8.68175 5.81729 8.57324Z" fill="#929397"/>
+                        <path d="M5.64185 21.3044C5.6676 21.6815 6.02452 21.647 6.02452 21.647C5.8263 21.647 5.66316 21.497 5.64185 21.3044Z" fill="#58585A"/>
+                        <path d="M5.84436 8.55712C5.87515 8.54083 5.90831 8.52855 5.9434 8.521C5.90609 8.52869 5.87323 8.54098 5.84436 8.55712Z" fill="#58585A"/>
+                        <path d="M5.81729 8.57318C5.82004 8.57144 5.82279 8.56985 5.82568 8.56812C5.82279 8.56985 5.81989 8.5713 5.81729 8.57318Z" fill="#58585A"/>
+                        <path d="M5.94861 8.52001C5.95749 8.51824 5.96652 8.51705 5.9757 8.51587C5.96637 8.51691 5.95749 8.51839 5.94861 8.52001Z" fill="#58585A"/>
+                        <path d="M6.29426 20.8767V9.35982H11.2926L10.3862 8.51245H6.02454C6.00736 8.51245 5.99138 8.51408 5.97568 8.51586C5.96665 8.51704 5.95748 8.51822 5.94859 8.52C5.94682 8.5203 5.94519 8.52074 5.94341 8.52119C5.90847 8.52874 5.87517 8.54102 5.84437 8.55731C5.83801 8.56086 5.83164 8.56441 5.82572 8.56826C5.82291 8.57004 5.81995 8.57167 5.81714 8.57344C5.66096 8.68195 5.63934 8.89764 5.63934 8.89764V21.262C5.63934 21.2772 5.64082 21.2906 5.64186 21.3046C5.66318 21.4972 5.82631 21.6472 6.02454 21.6472H24.4362L23.6121 20.8768L6.29426 20.8767Z" fill="#58585A"/>
+                        <path d="M10 11.3125H20.3125V12H10V11.3125Z" fill="#5CCFD5"/>
+                        <path d="M11.6875 11.6875V17.1875H18.5625V11.6875H11.6875ZM11 11H19.25V17.5312C19.25 17.6224 19.2138 17.7099 19.1493 17.7743C19.0849 17.8388 18.9974 17.875 18.9062 17.875H11.3438C11.2526 17.875 11.1651 17.8388 11.1007 17.7743C11.0362 17.7099 11 17.6224 11 17.5312V11Z" fill="#5CCFD5"/>
+                        <path d="M12.7934 20.0041H12L13.5537 17.3125L14.1491 17.6563L12.7934 20.0041ZM17.6691 20.0041H16.8758L15.52 17.6563L16.1154 17.3125L17.6691 20.0041Z" fill="#5CCFD5"/>
+                    </svg>
+                </div>
+                </a> -->
+
+                <a href="{% url 'rooms' %}" class="w-full  max-w-[100%]">
+                    <div class="order-1 md:order-none flex w-full w-full rounded-[10px] p-[15px]" style="border: 1px solid #d3d3d3;">
+                        <div class="flex flex-col gap-[5px] w-full" style="align-items: flex-start;">
+                            <p class="font-[500] text-[14px] w-full">Room</p>
+                            <p class="font-[500] text-[32px] w-full">{{ total_rooms }}</p>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="31" height="32" viewBox="0 0 31 32" fill="none">
+                            <path d="M15.4999 30.9998C24.0603 30.9998 30.9999 24.0603 30.9999 15.4999C30.9999 6.93955 24.0603 0 15.4999 0C6.93955 0 0 6.93955 0 15.4999C0 24.0603 6.93955 30.9998 15.4999 30.9998Z" fill="#FACC39"/>
+                            <path d="M30.9577 14.3531L25.2559 8.6355L6.19462 20.3856V22.1131H3.49591L3.39554 22.1326L12.0311 30.5373C13.1829 30.9013 13.6894 31.0101 15.5001 31.0101C24.0605 31.0101 31 24.0653 31 15.5049C31 15.1194 30.9854 14.7318 30.9577 14.3531Z" fill="#EFBF3A"/>
+                            <path d="M24.8472 9.08618H6.04645V21.2252H24.8472V9.08618Z" fill="#00ADBB"/>
+                            <path d="M3.21271 21.6646V22.0497C3.21271 22.0497 3.55941 22.4349 4.36828 22.4349C5.17716 22.4349 26.9013 22.4349 26.9013 22.4349C26.9013 22.4349 27.5176 22.2423 27.7872 22.0497V21.6646H3.21271Z" fill="#E6E6E6"/>
+                            <path d="M5.82571 8.56799C5.83158 8.56417 5.83789 8.56065 5.8442 8.55713C5.83789 8.5605 5.83188 8.56432 5.82571 8.56799Z" fill="#929397"/>
+                            <path d="M5.64185 21.3044C5.64097 21.2904 5.63934 21.2772 5.63934 21.262C5.63934 21.2764 5.64038 21.2906 5.64185 21.3044Z" fill="#929397"/>
+                            <path d="M5.97568 8.51584C5.99131 8.51407 6.00724 8.51245 6.02436 8.51245C6.00783 8.51245 5.99161 8.51378 5.97568 8.51584Z" fill="#929397"/>
+                            <path d="M24.9755 8.51245H10.3861L11.2926 9.35982H24.5903V20.8767H23.6122L24.4363 21.647H24.9756C25.1884 21.647 25.3608 21.4746 25.3608 21.2618V8.8975C25.3607 8.68477 25.1882 8.51245 24.9755 8.51245Z" fill="#333333"/>
+                            <path d="M5.81729 8.57324C5.71041 8.64164 5.6395 8.76125 5.6395 8.89744C5.6395 8.89744 5.66111 8.68175 5.81729 8.57324Z" fill="#929397"/>
+                            <path d="M5.64185 21.3044C5.6676 21.6815 6.02452 21.647 6.02452 21.647C5.8263 21.647 5.66316 21.497 5.64185 21.3044Z" fill="#58585A"/>
+                            <path d="M5.84436 8.55712C5.87515 8.54083 5.90831 8.52855 5.9434 8.521C5.90609 8.52869 5.87323 8.54098 5.84436 8.55712Z" fill="#58585A"/>
+                            <path d="M5.81729 8.57318C5.82004 8.57144 5.82279 8.56985 5.82568 8.56812C5.82279 8.56985 5.81989 8.5713 5.81729 8.57318Z" fill="#58585A"/>
+                            <path d="M5.94861 8.52001C5.95749 8.51824 5.96652 8.51705 5.9757 8.51587C5.96637 8.51691 5.95749 8.51839 5.94861 8.52001Z" fill="#58585A"/>
+                            <path d="M6.29426 20.8767V9.35982H11.2926L10.3862 8.51245H6.02454C6.00736 8.51245 5.99138 8.51408 5.97568 8.51586C5.96665 8.51704 5.95748 8.51822 5.94859 8.52C5.94682 8.5203 5.94519 8.52074 5.94341 8.52119C5.90847 8.52874 5.87517 8.54102 5.84437 8.55731C5.83801 8.56086 5.83164 8.56441 5.82572 8.56826C5.82291 8.57004 5.81995 8.57167 5.81714 8.57344C5.66096 8.68195 5.63934 8.89764 5.63934 8.89764V21.262C5.63934 21.2772 5.64082 21.2906 5.64186 21.3046C5.66318 21.4972 5.82631 21.6472 6.02454 21.6472H24.4362L23.6121 20.8768L6.29426 20.8767Z" fill="#58585A"/>
+                            <path d="M10 11.3125H20.3125V12H10V11.3125Z" fill="#5CCFD5"/>
+                            <path d="M11.6875 11.6875V17.1875H18.5625V11.6875H11.6875ZM11 11H19.25V17.5312C19.25 17.6224 19.2138 17.7099 19.1493 17.7743C19.0849 17.8388 18.9974 17.875 18.9062 17.875H11.3438C11.2526 17.875 11.1651 17.8388 11.1007 17.7743C11.0362 17.7099 11 17.6224 11 17.5312V11Z" fill="#5CCFD5"/>
+                            <path d="M12.7934 20.0041H12L13.5537 17.3125L14.1491 17.6563L12.7934 20.0041ZM17.6691 20.0041H16.8758L15.52 17.6563L16.1154 17.3125L17.6691 20.0041Z" fill="#5CCFD5"/>
+                        </svg>
+                    </div>
+                    </a>
+                    
+            </div>
+            
+        </div>
+
+    </div>
+    
+
+
+    <!-- <script>
+        function myFunction() {
+            var x = document.getElementById("menuopen");
+            var y = document.getElementById("menuclose");
+        
+            if (x.style.display === "none") {
+                x.style.display = "flex"; // Show the first element
+                y.style.display = "none"; // Hide the second element
+            } else {
+                x.style.display = "none"; // Hide the first element
+                y.style.display = "flex"; // Show the second element
+            }
+        }
+        </script> -->
+        <script>
+            // Function to set default state based on device width
+            function setDefaultState() {
+                var x = document.getElementById("menuopen");
+                var y = document.getElementById("menuclose");
+            
+                // Check if device width is smaller than 1000px
+                if (window.innerWidth < 650) {
+                    // If smaller, set both elements to display: none
+                    x.style.display = "none";
+                    y.style.display = "none";
+                } else if (window.innerWidth < 1000) {
+                    // If smaller than 1000px but larger than 650px, set menuclose as default
+                    x.style.display = "none";
+                    y.style.display = "flex";
+                } else {
+                    // If larger than or equal to 1000px, set menuopen as default
+                    x.style.display = "flex";
+                    y.style.display = "none";
+                }
+            }
+
+
+
+            function myFunction() {
+                var x = document.getElementById("menuopen");
+                var y = document.getElementById("menuclose");
+                var z = document.getElementById("menumob");
+
+                if (window.innerWidth < 650) {
+                    // If device width is smaller than 650px, only open menumob
+                    x.style.display = "none";
+                    y.style.display = "none";
+                    z.style.display = "flex";
+                } else {
+                    // If device width is 650px or larger, toggle between menuopen and menuclose
+                    if (x.style.display === "none") {
+                        x.style.display = "flex"; // Show the first element
+                        y.style.display = "none"; // Hide the second element
+                    } else {
+                        x.style.display = "none"; // Hide the first element
+                        y.style.display = "flex"; // Show the second element
+                    }
+                }
+            }
+
+            
+            
+            // Call the setDefaultState function when the page loads
+            document.addEventListener("DOMContentLoaded", setDefaultState);
+
+
+            function mobfuncclose() {
+                var zi = document.getElementById("menumob");
+
+                if (zi.style.display === "flex") {
+                        zi.style.display = "none";
+                }
+            }
+            </script>
+            
+            
+            
+{% endblock body %}
+</body>
+</html>
+
+

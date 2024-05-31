@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% block body %}
+    <h2>Record Payment</h2>
+    <form method="post">
+        {% csrf_token %}
+        <p>Student name</p>
+        <select id="student" name="student" class="border mt-[6px] block w-full sm:text-sm rounded-md border-gray-300 rounded-md px-4 py-2 w-full text-[14px]">
+            {% for student in student %}
+                <option value="{{ student.id }}">{{ student.full_name }}</option>
+            {% endfor %}
+        </select>
+    
+        <p>Room</p>
+        <select id="room" name="room" class="border mt-[6px] block w-full sm:text-sm rounded-md border-gray-300 rounded-md px-4 py-2 w-full text-[14px]">
+            
+            {% for room in room %}
+                <option value="{{ room.id }}">{{ room.roomname }}</option>
+            {% endfor %}
+        </select>
+    
+        <p>Month</p>
+        <select id="month" name="month" class="border mt-[6px] block w-full sm:text-sm rounded-md border-gray-300 rounded-md px-4 py-2 w-full text-[14px]">
+            <option value="" selected>All months</option>
+            {% for month_num, month_name in MONTH_CHOICES %}
+                <option value="{{ month_num }}">{{ month_name }}</option>
+            {% endfor %}
+        </select>
+    
+        <p>Amount</p>
+        <input type="number" id="amount" name="amount" placeholder="0.00" class="border mt-[6px] block w-full sm:text-sm rounded-md border-gray-300 rounded-md px-4 py-2 w-full text-[14px]" required>
+    
+        <p>Date</p>
+        <input type="date" id="date" name="date" value="{{ today }}" class="border mt-[6px] block w-full sm:text-sm rounded-md border-gray-300 rounded-md px-4 py-2 w-full text-[14px]" required>
+    
+        <button type="submit" class="border mt-[6px] block w-full sm:text-sm rounded-md border-gray-300 rounded-md px-4 py-2 w-full text-[14px]">Submit</button>
+    </form>
+
+    {% endblock body %}
+</body>
+
+
+<script>
+</script>
+</html>

@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" /> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+   
+    <title>Rooms | OxygenState</title>
+</head>
+<style>
+    *{
+        font-family: 'Inter';
+    }
+</style>
+<body>
+    {% block body %}
+    <!-- navigation bar start -->
+    <section class="flex py-[10px] bg-[#ffffff] px-[16px] justify-between items-center border-b border-[#d3d3d3] z-2 w-full" style="position: fixed; top: 0; z-index: 5;">
+        <div class="logocover flex items-center gap-[16px]">
+        
+            <svg id="toggleBtn" onclick="myFunction()"  class="hover:bg-[#efefef] rounded-[8px] cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
+                <path d="M26.0002 24.5C26.2551 24.5003 26.5003 24.5979 26.6856 24.7728C26.8709 24.9478 26.9825 25.187 26.9974 25.4414C27.0124 25.6958 26.9296 25.9464 26.766 26.1418C26.6024 26.3373 26.3703 26.4629 26.1172 26.493L26.0002 26.5H10.0002C9.74536 26.4997 9.50021 26.4021 9.31488 26.2272C9.12954 26.0522 9.01801 25.813 9.00307 25.5586C8.98813 25.3042 9.07092 25.0536 9.23451 24.8582C9.3981 24.6627 9.63015 24.5371 9.88324 24.507L10.0002 24.5H26.0002ZM26.0002 17.5C26.2655 17.5 26.5198 17.6054 26.7074 17.7929C26.8949 17.9804 27.0002 18.2348 27.0002 18.5C27.0002 18.7652 26.8949 19.0196 26.7074 19.2071C26.5198 19.3946 26.2655 19.5 26.0002 19.5H10.0002C9.73503 19.5 9.48067 19.3946 9.29314 19.2071C9.1056 19.0196 9.00024 18.7652 9.00024 18.5C9.00024 18.2348 9.1056 17.9804 9.29314 17.7929C9.48067 17.6054 9.73503 17.5 10.0002 17.5H26.0002ZM26.0002 10.5C26.2655 10.5 26.5198 10.6054 26.7074 10.7929C26.8949 10.9804 27.0002 11.2348 27.0002 11.5C27.0002 11.7652 26.8949 12.0196 26.7074 12.2071C26.5198 12.3946 26.2655 12.5 26.0002 12.5H10.0002C9.73503 12.5 9.48067 12.3946 9.29314 12.2071C9.1056 12.0196 9.00024 11.7652 9.00024 11.5C9.00024 11.2348 9.1056 10.9804 9.29314 10.7929C9.48067 10.6054 9.73503 10.5 10.0002 10.5H26.0002Z" fill="black"/>
+            </svg>
+            <h1 class="text-[#000000] font-[500] text-[20px]" style="font-family: 'Montserrat';">OxygenState</h1>
+        </div>
+        <a href="{% url 'signout' %}">
+            <div class="logout-container flex justify-center items-center gap-[10px] px-[10px] sm:px-[15px] py-[5px] bg-[#ffffff] hover:bg-[#efefef] rounded-[20px] cursor-pointer" >
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M17 7L15.59 8.41L18.17 11H8V13H18.17L15.59 15.58L17 17L22 12L17 7ZM4 5H12V3H4C2.9 3 2 3.9 2 5V19C2 20.1 2.9 21 4 21H12V19H4V5Z" fill="black"/>
+                </svg>
+                <p class="p-0 m-0 text-[#000000] text-[15px] font-[500] hidden sm:flex">Logout</p>
+            </div>
+        </a>
+    </section>
+    <!-- navigation bar end -->
+    <div class="parent-container flex flex-1 flex-grow-1 flex-shrink-1 flex-basis-0" style="align-items: flex-start; align-self: stretch;">
+        <div id="menuopen" class="side-menu flex min-w-[220px] flex-col md:flex pt-[57px]" style="height: 100vh; align-items: flex-start; align-self: stretch; border-right: 1px solid #d3d3d3; position: sticky; top: 0;">
+            <div class="side-menu-cont1 flex flex-col items-center w-full px-[12px] py-[10px] flex-1 flex-grow-1 flex-shrink-1 flex-basis-0" style="align-items: flex-start; align-self: stretch;">
+                
+                <a href="{% url 'home' %}" class="w-full">
+                    <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M20 19V10.5C20 10.3448 19.9639 10.1916 19.8944 10.0528C19.825 9.91393 19.7242 9.79315 19.6 9.7L12.6 4.45C12.4269 4.32018 12.2164 4.25 12 4.25C11.7836 4.25 11.5731 4.32018 11.4 4.45L4.4 9.7C4.2758 9.79315 4.175 9.91393 4.10557 10.0528C4.03614 10.1916 4 10.3448 4 10.5V19C4 19.2652 4.10536 19.5196 4.29289 19.7071C4.48043 19.8946 4.73478 20 5 20H9C9.26522 20 9.51957 19.8946 9.70711 19.7071C9.89464 19.5196 10 19.2652 10 19V16C10 15.7348 10.1054 15.4804 10.2929 15.2929C10.4804 15.1054 10.7348 15 11 15H13C13.2652 15 13.5196 15.1054 13.7071 15.2929C13.8946 15.4804 14 15.7348 14 16V19C14 19.2652 14.1054 19.5196 14.2929 19.7071C14.4804 19.8946 14.7348 20 15 20H19C19.2652 20 19.5196 19.8946 19.7071 19.7071C19.8946 19.5196 20 19.2652 20 19Z" stroke="black" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M4 18L4.5 20H9.5L10 19L10.5 15H14V19L15 20H19L20 19V10L12 4L4 10V18Z" fill="black" stroke="black"/>
+                        </svg>
+                        <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        -webkit-box-orient: vertical; overflow: hidden;
+                        -webkit-line-clamp: 1;">Home</h1>
+                    </div>
+                </a>
+
+                <a href="{% url 'students' %}" class="w-full">
+                    <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M18.5391 12.4805C18.8594 13.043 19.0977 13.6289 19.2539 14.2383C19.4102 14.8477 19.4922 15.4766 19.5 16.125V17.332L12 21.0938L4.5 17.332C4.5 16.8633 4.50391 16.4258 4.51172 16.0195C4.51953 15.6133 4.55469 15.2188 4.61719 14.8359C4.67969 14.4531 4.77344 14.0703 4.89844 13.6875C5.02344 13.3047 5.21094 12.9023 5.46094 12.4805L3 11.25V18.1289C3.22656 18.207 3.42969 18.3164 3.60938 18.457C3.78906 18.5977 3.94922 18.7617 4.08984 18.9492C4.23047 19.1367 4.33203 19.3398 4.39453 19.5586C4.45703 19.7773 4.49219 20.0078 4.5 20.25V24H0V20.25C0 20.0156 0.0351562 19.7891 0.105469 19.5703C0.175781 19.3516 0.277344 19.1445 0.410156 18.9492C0.542969 18.7539 0.699219 18.5898 0.878906 18.457C1.05859 18.3242 1.26562 18.2148 1.5 18.1289V10.5L0 9.75L12 3.75L24 9.75L18.5391 12.4805ZM3 20.25C3 20.0469 2.92578 19.8711 2.77734 19.7227C2.62891 19.5742 2.45312 19.5 2.25 19.5C2.04688 19.5 1.87109 19.5742 1.72266 19.7227C1.57422 19.8711 1.5 20.0469 1.5 20.25V22.5H3V20.25ZM3.35156 9.75L12 14.0742L20.6484 9.75L12 5.42578L3.35156 9.75ZM18 16.4062C18 15.8047 17.9414 15.2461 17.8242 14.7305C17.707 14.2148 17.5 13.6875 17.2031 13.1484L12 15.75L6.79688 13.1484C6.53906 13.6016 6.34375 14.0781 6.21094 14.5781C6.07812 15.0781 6.00781 15.5938 6 16.125V16.4062L12 19.4062L18 16.4062Z" fill="black"/>
+                        </svg>
+                        <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        -webkit-box-orient: vertical; overflow: hidden;
+                        -webkit-line-clamp: 1;">Students</h1>
+                    </div>
+                </a>
+
+
+                
+                <a href="{% url 'rooms' %}" class="w-full">
+                    <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M4 4H5.71429V20H4V4ZM10 7.2H17V8.8H10V7.2ZM10 10.4L17 10.5V12H10V10.4Z" fill="black"/>
+                            <path d="M18.2667 4H7V20H18.2667C19.2226 20 20 19.2824 20 18.4V5.6C20 4.7176 19.2226 4 18.2667 4ZM18.2667 18.4H8.73333V5.6H18.2667V18.4Z" fill="black"/>
+                        </svg>
+                        <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        -webkit-box-orient: vertical; overflow: hidden;
+                        -webkit-line-clamp: 1;">Rooms</h1>
+                    </div>
+                 </a>
+
+
+
+                 <a href="{% url 'paymentinfo' %}" class="w-full">
+                    <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M13.66 7C13.1 5.82 11.9 5 10.5 5H6V3H18V5H14.74C15.22 5.58 15.58 6.26 15.79 7H18V9H15.98C15.73 11.8 13.37 14 10.5 14H9.77L16.5 21H13.73L7 14V12H10.5C12.26 12 13.72 10.7 13.96 9H6V7H13.66Z" fill="black"/>
+                        </svg>
+                        <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        -webkit-box-orient: vertical; overflow: hidden;
+                        -webkit-line-clamp: 1;">Payment Info</h1>
+                    </div>
+                 </a>
+                
+            </div>
+        </div>
+
+
+        <div id="menuclose" class="side-menu-collapsed flex w-auto flex-col md:flex pt-[57px]" style="display: none; height: 100vh; align-items: flex-start; align-self: stretch; border-right: 1px solid #d3d3d3; position: sticky; top:0;">
+            <div class="side-menu-cont1 flex flex-col items-center w-full px-[12px] py-[10px] flex-1 flex-grow-1 flex-shrink-1 flex-basis-0" style="align-items: flex-start; align-self: stretch;">
+                <a href="{% url 'home' %}">
+                <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M20 19V10.5C20 10.3448 19.9639 10.1916 19.8944 10.0528C19.825 9.91393 19.7242 9.79315 19.6 9.7L12.6 4.45C12.4269 4.32018 12.2164 4.25 12 4.25C11.7836 4.25 11.5731 4.32018 11.4 4.45L4.4 9.7C4.2758 9.79315 4.175 9.91393 4.10557 10.0528C4.03614 10.1916 4 10.3448 4 10.5V19C4 19.2652 4.10536 19.5196 4.29289 19.7071C4.48043 19.8946 4.73478 20 5 20H9C9.26522 20 9.51957 19.8946 9.70711 19.7071C9.89464 19.5196 10 19.2652 10 19V16C10 15.7348 10.1054 15.4804 10.2929 15.2929C10.4804 15.1054 10.7348 15 11 15H13C13.2652 15 13.5196 15.1054 13.7071 15.2929C13.8946 15.4804 14 15.7348 14 16V19C14 19.2652 14.1054 19.5196 14.2929 19.7071C14.4804 19.8946 14.7348 20 15 20H19C19.2652 20 19.5196 19.8946 19.7071 19.7071C19.8946 19.5196 20 19.2652 20 19Z" stroke="black" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M4 18L4.5 20H9.5L10 19L10.5 15H14V19L15 20H19L20 19V10L12 4L4 10V18Z" fill="black" stroke="black"/>
+                    </svg>
+                    <!-- <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    -webkit-box-orient: vertical; overflow: hidden;
+                    -webkit-line-clamp: 1;">Home</h1> -->
+                </div>
+                </a>
+
+                <a href="{% url 'students' %}">
+                <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M18.5391 12.4805C18.8594 13.043 19.0977 13.6289 19.2539 14.2383C19.4102 14.8477 19.4922 15.4766 19.5 16.125V17.332L12 21.0938L4.5 17.332C4.5 16.8633 4.50391 16.4258 4.51172 16.0195C4.51953 15.6133 4.55469 15.2188 4.61719 14.8359C4.67969 14.4531 4.77344 14.0703 4.89844 13.6875C5.02344 13.3047 5.21094 12.9023 5.46094 12.4805L3 11.25V18.1289C3.22656 18.207 3.42969 18.3164 3.60938 18.457C3.78906 18.5977 3.94922 18.7617 4.08984 18.9492C4.23047 19.1367 4.33203 19.3398 4.39453 19.5586C4.45703 19.7773 4.49219 20.0078 4.5 20.25V24H0V20.25C0 20.0156 0.0351562 19.7891 0.105469 19.5703C0.175781 19.3516 0.277344 19.1445 0.410156 18.9492C0.542969 18.7539 0.699219 18.5898 0.878906 18.457C1.05859 18.3242 1.26562 18.2148 1.5 18.1289V10.5L0 9.75L12 3.75L24 9.75L18.5391 12.4805ZM3 20.25C3 20.0469 2.92578 19.8711 2.77734 19.7227C2.62891 19.5742 2.45312 19.5 2.25 19.5C2.04688 19.5 1.87109 19.5742 1.72266 19.7227C1.57422 19.8711 1.5 20.0469 1.5 20.25V22.5H3V20.25ZM3.35156 9.75L12 14.0742L20.6484 9.75L12 5.42578L3.35156 9.75ZM18 16.4062C18 15.8047 17.9414 15.2461 17.8242 14.7305C17.707 14.2148 17.5 13.6875 17.2031 13.1484L12 15.75L6.79688 13.1484C6.53906 13.6016 6.34375 14.0781 6.21094 14.5781C6.07812 15.0781 6.00781 15.5938 6 16.125V16.4062L12 19.4062L18 16.4062Z" fill="black"/>
+                    </svg>
+                    <!-- <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    -webkit-box-orient: vertical; overflow: hidden;
+                    -webkit-line-clamp: 1;">Students</h1> -->
+                </div>
+                </a>
+
+                <a href="{% url 'rooms' %}">
+                <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M4 4H5.71429V20H4V4ZM10 7.2H17V8.8H10V7.2ZM10 10.4L17 10.5V12H10V10.4Z" fill="black"/>
+                        <path d="M18.2667 4H7V20H18.2667C19.2226 20 20 19.2824 20 18.4V5.6C20 4.7176 19.2226 4 18.2667 4ZM18.2667 18.4H8.73333V5.6H18.2667V18.4Z" fill="black"/>
+                    </svg>
+                    <!-- <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    -webkit-box-orient: vertical; overflow: hidden;
+                    -webkit-line-clamp: 1;">Rooms</h1> -->
+                </div>
+                </a>
+
+                
+
+                <a href="{% url 'paymentinfo' %}">
+                    <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M13.66 7C13.1 5.82 11.9 5 10.5 5H6V3H18V5H14.74C15.22 5.58 15.58 6.26 15.79 7H18V9H15.98C15.73 11.8 13.37 14 10.5 14H9.77L16.5 21H13.73L7 14V12H10.5C12.26 12 13.72 10.7 13.96 9H6V7H13.66Z" fill="black"/>
+                        </svg>
+                        <!-- <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        -webkit-box-orient: vertical; overflow: hidden;
+                        -webkit-line-clamp: 1;">Rooms</h1> -->
+                    </div>
+                    </a>
+            </div>
+        </div>
+
+        <div id="menumob" class="side-menu flex min-w-[275px] bg-[#ffffff] flex-col md:flex z-3" style="display: none; height: 100vh; align-items: flex-start; align-self: stretch; border-right: 1px solid #d3d3d3; position: fixed; top: 0; left: 0; z-index: 10;">
+            <div class="side-menu-cont1 flex flex-col items-center w-full px-[12px] py-[10px] flex-1 flex-grow-1 flex-shrink-1 flex-basis-0" style="align-items: flex-start; align-self: stretch;">
+                <div class="menuitems flex items-center gap-[20px] w-auto px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                    <svg onclick="mobfuncclose()" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 5L19 19M5 19L19 5" stroke="black" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    
+                </div>
+
+                <a href="{% url 'home' %}" class="w-full">
+                <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M20 19V10.5C20 10.3448 19.9639 10.1916 19.8944 10.0528C19.825 9.91393 19.7242 9.79315 19.6 9.7L12.6 4.45C12.4269 4.32018 12.2164 4.25 12 4.25C11.7836 4.25 11.5731 4.32018 11.4 4.45L4.4 9.7C4.2758 9.79315 4.175 9.91393 4.10557 10.0528C4.03614 10.1916 4 10.3448 4 10.5V19C4 19.2652 4.10536 19.5196 4.29289 19.7071C4.48043 19.8946 4.73478 20 5 20H9C9.26522 20 9.51957 19.8946 9.70711 19.7071C9.89464 19.5196 10 19.2652 10 19V16C10 15.7348 10.1054 15.4804 10.2929 15.2929C10.4804 15.1054 10.7348 15 11 15H13C13.2652 15 13.5196 15.1054 13.7071 15.2929C13.8946 15.4804 14 15.7348 14 16V19C14 19.2652 14.1054 19.5196 14.2929 19.7071C14.4804 19.8946 14.7348 20 15 20H19C19.2652 20 19.5196 19.8946 19.7071 19.7071C19.8946 19.5196 20 19.2652 20 19Z" stroke="black" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M4 18L4.5 20H9.5L10 19L10.5 15H14V19L15 20H19L20 19V10L12 4L4 10V18Z" fill="black" stroke="black"/>
+                    </svg>
+                    <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    -webkit-box-orient: vertical; overflow: hidden;
+                    -webkit-line-clamp: 1;">Home</h1>
+                </div>
+                </a>
+
+                <a href="{% url 'students' %}" class="w-full">
+                <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M18.5391 12.4805C18.8594 13.043 19.0977 13.6289 19.2539 14.2383C19.4102 14.8477 19.4922 15.4766 19.5 16.125V17.332L12 21.0938L4.5 17.332C4.5 16.8633 4.50391 16.4258 4.51172 16.0195C4.51953 15.6133 4.55469 15.2188 4.61719 14.8359C4.67969 14.4531 4.77344 14.0703 4.89844 13.6875C5.02344 13.3047 5.21094 12.9023 5.46094 12.4805L3 11.25V18.1289C3.22656 18.207 3.42969 18.3164 3.60938 18.457C3.78906 18.5977 3.94922 18.7617 4.08984 18.9492C4.23047 19.1367 4.33203 19.3398 4.39453 19.5586C4.45703 19.7773 4.49219 20.0078 4.5 20.25V24H0V20.25C0 20.0156 0.0351562 19.7891 0.105469 19.5703C0.175781 19.3516 0.277344 19.1445 0.410156 18.9492C0.542969 18.7539 0.699219 18.5898 0.878906 18.457C1.05859 18.3242 1.26562 18.2148 1.5 18.1289V10.5L0 9.75L12 3.75L24 9.75L18.5391 12.4805ZM3 20.25C3 20.0469 2.92578 19.8711 2.77734 19.7227C2.62891 19.5742 2.45312 19.5 2.25 19.5C2.04688 19.5 1.87109 19.5742 1.72266 19.7227C1.57422 19.8711 1.5 20.0469 1.5 20.25V22.5H3V20.25ZM3.35156 9.75L12 14.0742L20.6484 9.75L12 5.42578L3.35156 9.75ZM18 16.4062C18 15.8047 17.9414 15.2461 17.8242 14.7305C17.707 14.2148 17.5 13.6875 17.2031 13.1484L12 15.75L6.79688 13.1484C6.53906 13.6016 6.34375 14.0781 6.21094 14.5781C6.07812 15.0781 6.00781 15.5938 6 16.125V16.4062L12 19.4062L18 16.4062Z" fill="black"/>
+                    </svg>
+                    <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    -webkit-box-orient: vertical; overflow: hidden;
+                    -webkit-line-clamp: 1;">Students</h1>
+                </div>
+                </a>
+
+                <a href="{% url 'rooms' %}" class="w-full">
+                <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M4 4H5.71429V20H4V4ZM10 7.2H17V8.8H10V7.2ZM10 10.4L17 10.5V12H10V10.4Z" fill="black"/>
+                        <path d="M18.2667 4H7V20H18.2667C19.2226 20 20 19.2824 20 18.4V5.6C20 4.7176 19.2226 4 18.2667 4ZM18.2667 18.4H8.73333V5.6H18.2667V18.4Z" fill="black"/>
+                    </svg>
+                    <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    -webkit-box-orient: vertical; overflow: hidden;
+                    -webkit-line-clamp: 1;">Rooms</h1>
+                </div>
+                </a>
+                
+                <a href="{% url 'paymentinfo' %}" class="w-full">
+                    <div class="menuitems flex items-center gap-[20px] w-full px-[10px] py-[9px] hover:bg-[#efefef] rounded-[8px] cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M13.66 7C13.1 5.82 11.9 5 10.5 5H6V3H18V5H14.74C15.22 5.58 15.58 6.26 15.79 7H18V9H15.98C15.73 11.8 13.37 14 10.5 14H9.77L16.5 21H13.73L7 14V12H10.5C12.26 12 13.72 10.7 13.96 9H6V7H13.66Z" fill="black"/>
+                        </svg>
+                        <h1 class="text-[#000000] text-[15px] font-[500]" style="display: -webkit-box; white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        -webkit-box-orient: vertical; overflow: hidden;
+                        -webkit-line-clamp: 1;">Payment Info</h1>
+                    </div>
+                 </a>
+            </div>
+        </div>
+
+        <div class="content-container flex w-full bg-[#ffffff] px-[15px] sm:px-[25px] md:px-[45px] pt-[80px] md:pt-[50px] pb-[10px] flex-col gap-[20px] sm:gap-[20px]" style="position: relative;">
+            
+            <div class="flex items-start gap-[20px] w-full mb-[0px] bg-[#ffffff] pt-[20px]" style="border-bottom: 1px solid #d3d3d3; position: sticky; top: 50px; left: 0; z-index: 2;">
+                <div class="flex pb-[10px] justify-center gap-[10px] items-center text-[#000000] font-[600] text-[14px]" style="border-bottom: 3px solid #000;">Payments Completed
+                </div>
+
+                <div class="flex pb-[10px] justify-center gap-[10px] items-center text-[#858585] font-[500] text-[14px]">Payments Due
+                </div>
+            </div>
+
+            
+
+
+            <div class="flex gap-[20px] flex-col pt-[5x]">
+                <div class="flex justify-start items-center">
+                    <h1 class="text-[18px] sm:text-[20px] md:text-[24px] font-[500] text-[#000000]">Payments Completed</h1>
+                    <!-- <a onclick="createstudent()" style="cursor: pointer;">
+                        <div class="flex gap-[5px] bg-[#000000] items-center py-[7px] pl-[12px] pr-[17px] rounded-[30px]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23" fill="none">
+                                <path d="M11.5 5.03125V17.9688M17.9688 11.5H5.03125" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+
+                            <p class="p-0 text-[#ffffff] text-[14px]">Record Payment</p>
+                        </div>
+                    </a> -->
+                </div>
+
+                <div class="flex justify-between items-center">
+                    <div class="flex w-full gap-[15px] flex-col md:flex-row">
+                        
+                        <div class="flex justify-between rounded-full px-[9px] py-[9px] w-full max-w-[400px] h-[40px] bg-[#f0f0f0]">
+                            <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g id="iconamoon:search-light">
+                                <path id="Vector" d="M17.5 18L13.8808 14.3809M13.8808 14.3809C14.4999 13.7618 14.991 13.0269 15.326 12.218C15.661 11.4091 15.8335 10.5422 15.8335 9.66672C15.8335 8.79121 15.6611 7.92429 15.326 7.11543C14.991 6.30657 14.4999 5.57162 13.8808 4.95255C13.2617 4.33348 12.5268 3.8424 11.7179 3.50736C10.9091 3.17232 10.0422 2.99988 9.16666 2.99988C8.29115 2.99988 7.42422 3.17232 6.61537 3.50736C5.80651 3.8424 5.07156 4.33348 4.45249 4.95255C3.20221 6.20282 2.49982 7.89856 2.49982 9.66672C2.49982 11.4349 3.20221 13.1306 4.45249 14.3809C5.70276 15.6312 7.3985 16.3336 9.16666 16.3336C10.9348 16.3336 12.6305 15.6312 13.8808 14.3809Z" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </g>
+                                </svg>
+                                
+                                <input class="mx-2 text-[15px]" type="text" id="search" style="outline: none; background: #F0F0F0; width: 100%; " placeholder="Search student" name="query" value="{{ request.GET.query }}">
+                                
+                              
+                        </div>
+                        
+                        <form id="payment-filter-form" method="post" class="w-full">
+                            {% csrf_token %}
+
+                            <div class="flex gap-[15px] w-full">
+                                <div class="relative inline-block w-[auto]">
+                                    <select name="room" id="room" class="text-[14px] block appearance-none w-full bg-[#F0F0F0] px-4 py-2 pr-8 rounded-[25px] leading-tight">
+                                        <option value="" selected>All rooms</option>
+                                        {% for room in room %}
+                                        <option value="{{ room.id }}">{{ room.roomname }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                        <!-- Custom arrow -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                            <path d="M8.46967 12.3305C8.76256 12.6234 9.23744 12.6234 9.53033 12.3305L14.3033 7.55755C14.5962 7.26466 14.5962 6.78979 14.3033 6.49689C14.0104 6.204 13.5355 6.204 13.2426 6.49689L9 10.7395L4.75736 6.4969C4.46447 6.204 3.98959 6.204 3.6967 6.4969C3.40381 6.78979 3.40381 7.26466 3.6967 7.55756L8.46967 12.3305ZM8.25 11.2002L8.25 11.8002L9.75 11.8002L9.75 11.2002L8.25 11.2002Z" fill="black"/>
+                                            </svg>
+                                    </div>
+                                </div>
+                                
+                                <div class="relative inline-block w-[auto]">
+                                    <select name="month" id="month" class="text-[14px] block appearance-none w-full bg-[#F0F0F0] px-4 py-2 pr-8 rounded-[25px] leading-tight">
+                                        <option value="" selected>All month</option>
+                                        {% for month_num, month_name in MONTH_CHOICES %}
+                                            <option value="{{ month_num }}">{{ month_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                        <!-- Custom arrow -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                            <path d="M8.46967 12.3305C8.76256 12.6234 9.23744 12.6234 9.53033 12.3305L14.3033 7.55755C14.5962 7.26466 14.5962 6.78979 14.3033 6.49689C14.0104 6.204 13.5355 6.204 13.2426 6.49689L9 10.7395L4.75736 6.4969C4.46447 6.204 3.98959 6.204 3.6967 6.4969C3.40381 6.78979 3.40381 7.26466 3.6967 7.55756L8.46967 12.3305ZM8.25 11.2002L8.25 11.8002L9.75 11.8002L9.75 11.2002L8.25 11.2002Z" fill="black"/>
+                                            </svg>
+                                    </div>
+                                </div>
+                                <button type="submit" class="text-[14px] text-[#2475D4] font-[500] bg-[#DEEDFF] px-4 py-2 rounded-[20px]" >Apply</button>
+                            </div>
+                            
+                            
+                          </form>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="relative overflow-x-auto py-3 hidden md:block">
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                    <thead class="text-xs text-black border-b border-gray-300">
+                        <tr>
+                            <th scope="col" class="px-6 py-4 text-[14px]">
+                                Student name
+                            </th>
+                            <th scope="col" class="px-6 py-4 text-[14px] max-w-[200px]">
+                                Room
+                            </th>
+                            <th scope="col" class="px-6 py-4 text-[14px]">
+                                Payment for month
+                            </th>
+                            <th scope="col" class="px-6 py-4 text-[14px]">
+                                Payment recorded on
+                            </th>
+                            <th scope="col" class="px-6 py-4 text-[14px]">
+                                Recorded amount
+                            </th>
+                            <th scope="col" class="px-6 py-4 text-[14px]">
+                                <span class="sr-only">Edit</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="searchTable">
+                        {% for payment in payments %}
+                        <tr class="bg-white border-b border-gray-300 hover:bg-gray-50 hover:bg-gray-200">
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-black text-[14px]">
+                                {{ payment.student.full_name }}
+                            </th>
+                            <td class="px-6 py-4 text-[14px]">
+                                {{ payment.room.roomname }}
+                            </td>
+                            <td class="px-6 py-4 text-[14px]">
+                                {% if payment.month == 1 %}
+                                                January
+                                                {% elif payment.month == 2 %}
+                                                February
+                                                {% elif payment.month == 3 %}
+                                                March
+                                                {% elif payment.month == 4 %}
+                                                April
+                                                {% elif payment.month == 5 %}
+                                                May
+                                                {% elif payment.month == 6 %}
+                                                June
+                                                {% elif payment.month == 7 %}
+                                                July
+                                                {% elif payment.month == 8 %}
+                                                August
+                                                {% elif payment.month == 9 %}
+                                                September
+                                                {% elif payment.month == 10 %}
+                                                October
+                                                {% elif payment.month == 11 %}
+                                                November
+                                                {% elif payment.month == 12 %}
+                                                December
+                                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 text-[14px]">
+                                {{ payment.date }}
+                            </td>
+                            <td class="px-6 py-4 text-[14px]">
+                                ₹ {{ payment.amount }}
+                            </td>
+                            <td class="px-6 py-4 text-[14px] text-right">
+                                <a href="{% url 'paymentinfodelete' payment_id=payment.id %}" style="color: #D80000;" class="font-medium text-red text-blue-500 hover:underline">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        
+                        
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="w-full flex flex-col gap-[12px] md:hidden">
+                {% for payment in payments %}
+                
+                <div class="w-full flex flex-col px-[13px] py-[13px] items-start gap-[10px] rounded-[8px]" style="border: 1px solid #d3d3d3;">
+                    <div class="flex w-full">
+                        <div class="flex items-start gap-[2px] w-full flex-col">
+                            <div class="flex w-full flex-col gap-[2px] items-start text-[#8a8a8a] text-[12px]" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">Student name</div>
+                            <div class="flex w-full flex-col gap-[2px] items-start text-[#000000] text-[14px]" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{ payment.student.full_name }}</div>
+                        </div>
+                        <div class="flex items-start gap-[2px] w-full flex-col">
+                            <div class="flex w-full flex-col gap-[2px] items-start text-[#8a8a8a] text-[12px]" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">Room</div>
+                            <div class="flex w-full flex-col gap-[2px] items-start text-[#000000] text-[14px]" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{ payment.room.roomname}}</div>
+                        </div>
+                    </div>
+
+                    <div class="flex w-full">
+                        <div class="flex items-start gap-[2px] w-full flex-col">
+                            <div class="flex w-full flex-col gap-[2px] items-start text-[#8a8a8a] text-[12px]" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">Payment for month</div>
+                            <div class="flex w-full flex-col gap-[2px] items-start text-[#000000] text-[14px]" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                                {% if payment.month == 1 %}
+                                January
+                                {% elif payment.month == 2 %}
+                                February
+                                {% elif payment.month == 3 %}
+                                March
+                                {% elif payment.month == 4 %}
+                                April
+                                {% elif payment.month == 5 %}
+                                May
+                                {% elif payment.month == 6 %}
+                                June
+                                {% elif payment.month == 7 %}
+                                July
+                                {% elif payment.month == 8 %}
+                                August
+                                {% elif payment.month == 9 %}
+                                September
+                                {% elif payment.month == 10 %}
+                                October
+                                {% elif payment.month == 11 %}
+                                November
+                                {% elif payment.month == 12 %}
+                                December
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-[2px] w-full flex-col">
+                            <div class="flex w-full flex-col gap-[2px] items-start text-[#8a8a8a] text-[12px]" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">Payment rec on</div>
+                            <div class="flex w-full flex-col gap-[2px] items-start text-[#000000] text-[14px]" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{ payment.date }}</div>
+                        </div>
+                    </div>
+                    <div class="flex w-full">
+                        <div class="flex items-start gap-[2px] w-full flex-col">
+                            <div class="flex w-full flex-col gap-[2px] items-start text-[#8a8a8a] text-[12px]" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">Payment amount</div>
+                            <div class="flex w-full flex-col gap-[2px] items-start text-[#000000] text-[14px]" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">₹ {{ payment.amount }}</div>
+                        </div>
+                        <div class="flex items-start gap-[2px] w-full flex-col justify-center">
+                            <a href="{% url 'paymentinfodelete' payment_id=payment.id %}" style="color: #D80000;" class="rounded-[20px] font-medium text-[13px] px-[15px] py-[4px] text-[#F03333] text-blue-500 bg-[#FEE4E4]">Delete Record</a>
+                        </div>
+                        
+                    </div>
+                    
+
+                </div>
+                {% endfor %}
+
+            </div>
+            
+        </div>
+        
+
+    </div>
+    
+    <section id="createstudentpopup" class="  clicked fixed top-0 bottom-0 left-0 right-0 grid grid-cols-[1fr,345px] h-screen z-50" style="display: none; height: 100vh;">
+        <div id="clickedleftside" onclick="closestudent()" class="bg-black bg-opacity-45 absolute w-screen h-screen"></div>
+        <div id="clickedrightside" class="w-full max-w-[345px] h-screen p-6 bg-white shadow-lg z-4 absolute top-0 right-0">
+            <div class="flex justify-between items-center">
+                <span class="text-[20px] font-[600] ">Record Payment</span>
+                <svg onclick="closestudent()" style="cursor: pointer;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 1.5C6.15 1.5 1.5 6.15 1.5 12C1.5 17.85 6.15 22.5 12 22.5C17.85 22.5 22.5 17.85 22.5 12C22.5 6.15 17.85 1.5 12 1.5ZM16.05 17.25L12 13.2L7.95 17.25L6.75 16.05L10.8 12L6.75 7.95L7.95 6.75L12 10.8L16.05 6.75L17.25 7.95L13.2 12L17.25 16.05L16.05 17.25Z" fill="black"/>
+                </svg>
+                
+            </div>
+            <div class="form">
+                <form action="{% url 'add_student' %}" method="post">
+                    {% csrf_token %}
+                    <p class="font-[500] text-[14px] mt-4">Student name</p>
+                    <input type="text" id="full_name" name="full_name" placeholder="Full name" class="border mt-[6px] border-gray-300 rounded-md px-4 py-2 w-full text-[14px]" required>
+                    <p class="font-[500] text-[14px] mt-4">Student phone number</p>
+                    <input type="number" id="phone_number" name="phone_number" placeholder="Phone number" class="border mt-[6px] border-gray-300 rounded-md px-4 py-2 w-full text-[14px]" required>
+                    <p class="font-[500] text-[14px] mt-4">Room (Optional)</p>
+                    <select id="rooms" name="rooms" multiple class="border mt-[6px] block w-full sm:text-sm rounded-md border-gray-300 rounded-md px-4 py-2 w-full text-[14px]">
+                        <!-- Add options dynamically using Django template -->
+                        {% for room in room %}
+                            <option value="{{ room.id }}">{{ room.roomname }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="mt-[15px] bg-black w-full text-white text-[14px] px-4 py-2 rounded-[20px] cursor-pointer hover:bg-[#313131]">Submit</button>
+                </form>
+            </div>
+        </div>
+        
+    </section>
+
+
+    <!-- <script>
+        function myFunction() {
+            var x = document.getElementById("menuopen");
+            var y = document.getElementById("menuclose");
+        
+            if (x.style.display === "none") {
+                x.style.display = "flex"; // Show the first element
+                y.style.display = "none"; // Hide the second element
+            } else {
+                x.style.display = "none"; // Hide the first element
+                y.style.display = "flex"; // Show the second element
+            }
+        }
+        </script> -->
+        <script>
+            // Function to set default state based on device width
+            function setDefaultState() {
+                var x = document.getElementById("menuopen");
+                var y = document.getElementById("menuclose");
+            
+                // Check if device width is smaller than 1000px
+                if (window.innerWidth < 650) {
+                    // If smaller, set both elements to display: none
+                    x.style.display = "none";
+                    y.style.display = "none";
+                } else if (window.innerWidth < 1000) {
+                    // If smaller than 1000px but larger than 650px, set menuclose as default
+                    x.style.display = "none";
+                    y.style.display = "flex";
+                } else {
+                    // If larger than or equal to 1000px, set menuopen as default
+                    x.style.display = "flex";
+                    y.style.display = "none";
+                }
+            }
+
+
+
+            function myFunction() {
+                var x = document.getElementById("menuopen");
+                var y = document.getElementById("menuclose");
+                var z = document.getElementById("menumob");
+
+                if (window.innerWidth < 650) {
+                    // If device width is smaller than 650px, only open menumob
+                    x.style.display = "none";
+                    y.style.display = "none";
+                    z.style.display = "flex";
+                } else {
+                    // If device width is 650px or larger, toggle between menuopen and menuclose
+                    if (x.style.display === "none") {
+                        x.style.display = "flex"; // Show the first element
+                        y.style.display = "none"; // Hide the second element
+                    } else {
+                        x.style.display = "none"; // Hide the first element
+                        y.style.display = "flex"; // Show the second element
+                    }
+                }
+            }
+
+            
+            
+            // Call the setDefaultState function when the page loads
+            document.addEventListener("DOMContentLoaded", setDefaultState);
+
+
+            function mobfuncclose() {
+                var zi = document.getElementById("menumob");
+
+                if (zi.style.display === "flex") {
+                        zi.style.display = "none";
+                }
+            }
+
+            function createstudent() {
+                var ai = document.getElementById("createstudentpopup");
+
+                if (ai.style.display === "none") {
+                        ai.style.display = "block";
+                }
+            }
+            function closestudent() {
+                var ai = document.getElementById("createstudentpopup");
+
+                if (ai.style.display === "block") {
+                        ai.style.display = "none";
+                }
+            }
+
+            function filterPayments() {
+            // Get the selected room value
+            const selectedRoom = document.getElementById('room').value;
+
+            // Fetch the filtered payments using AJAX (or fetch API)
+            fetch('/paymentinfo/', {
+            method: 'POST',
+            body: JSON.stringify({ room: selectedRoom }),
+            headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+            // Update the displayed payments on the page based on the response data
+            const paymentList = document.getElementById('payment-list');  // Replace with your element ID for displaying payments
+            paymentList.innerHTML = '';  // Clear existing payments
+
+            // Loop through the filtered payments received from the server (data)
+            for (const payment of data) {
+                // Create HTML elements for each payment (e.g., list items, table rows)
+                const paymentItem = document.createElement('li');  // Replace with your desired element
+                paymentItem.textContent = `
+                ${payment.student.full_name} - ${payment.room.roomname} - ${payment.amount} - (${payment.date})
+                `;
+                paymentList.appendChild(paymentItem);
+            }
+            })
+            .catch(error => {
+            console.error('Error fetching filtered payments:', error);
+            // Handle errors gracefully (e.g., display an error message to the user)
+            });
+        }
+
+
+        const searchInput = document.getElementById('search');
+        const tableRows = document.querySelectorAll('#searchTable tr');
+
+        searchInput.addEventListener('input', function () {
+            const searchText = this.value.trim().toLowerCase();
+
+            tableRows.forEach(row => {
+                const studentName = row.querySelector('th').textContent.trim().toLowerCase();
+                if (studentName.includes(searchText)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+            
+
+
+
+   
+            </script>
+            
+            
+            
+{% endblock body %}
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+
+

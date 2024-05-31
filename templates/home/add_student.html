@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% block body %}
+    <form method="post">
+        {% csrf_token %}
+        <label for="id_full_name">Full Name:</label>
+        <input type="text" id="id_full_name" name="full_name" required>
+        <br>
+        <label for="id_date_of_birth">Date of Birth:</label>
+        <input type="date" id="id_date_of_birth" name="date_of_birth">
+        <br>
+        <label for="id_school">School:</label>
+        <input type="text" id="id_school" name="school">
+        <br>
+        <label for="id_class_level">Class Level:</label>
+        <input type="text" id="id_class_level" name="class_level">
+        <br>
+        <label for="id_phone_number">Phone Number:</label>
+        <input type="text" id="id_phone_number" name="phone_number" required>
+        <br>
+        <label for="id_father_name">Father's Name:</label>
+        <input type="text" id="id_father_name" name="father_name">
+        <br>
+        <label for="id_father_phone">Father's Phone:</label>
+        <input type="text" id="id_father_phone" name="father_phone">
+        <br>
+        <label for="id_mother_name">Mother's Name:</label>
+        <input type="text" id="id_mother_name" name="mother_name">
+        <br>
+        <label for="id_mother_phone">Mother's Phone:</label>
+        <input type="text" id="id_mother_phone" name="mother_phone">
+        <br>
+        <label for="id_address">Address:</label>
+        <textarea id="id_address" name="address"></textarea>
+        <br>
+        <button type="submit">Add Student</button>
+      </form>
+    {% endblock body %}
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Record Attendance</title>
+</head>
+<body>
+    <h1>Record Attendance for {{ roomname }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="attendance_date">Attendance Date:</label>
+        <input type="date" id="attendance_date" name="attendance_date" required><br><br>
+
+        {% for student in students %}
+            <label for="student_{{ student.id }}">
+                <input type="checkbox" id="student_{{ student.id }}" name="student_{{ student.id }}" value="1">
+                {{ student.full_name }}
+            </label><br>
+        {% endfor %}
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

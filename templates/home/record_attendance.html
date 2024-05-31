@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Record Attendance</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" /> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+   
+</head>
+<style>
+    *{
+        font-family: 'Inter';
+    }
+    input:checked {
+      background-color: #22c55e; /* bg-green-500 */
+    }
+  
+    input:checked ~ span:last-child {
+      --tw-translate-x: 1.75rem; /* translate-x-7 */
+    }
+  </style>
+<body>
+<div class="">
+    <div class="bg-white flex gap-[20px] px-[15px] py-[15px] w-full items-center" style="border-bottom: 1px solid #d3d3d3; position: sticky; top: 0; left: 0; z-index: 1;">
+        <h1 class="text-[18px] w-full sm:text-[20px] md:text-[24px] font-[500] text-[#000000]" style="overflow: hidden; text-overflow: ellipsis; text-wrap: nowrap;">Record Attendance for {{ roomname }}</h1>
+        <a href="{% url 'room_detail' roomname=roomname %}" class="w-auto">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
+                <path d="M6 6.5L18 18.5M6 18.5L18 6.5" stroke="black" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+    </div>
+    
+    <div class="w-full max-w-[650px] mx-auto pt-[10px] pb[45px] px-[15px]" style=" height: 100vh;">
+    
+    <form method="post" class="pb-[60px]">
+        {% csrf_token %}
+        <p class="font-[500] text-[16px] mt-4">Attendance Date</p>
+        
+        <input type="date" id="attendance_date" name="attendance_date" class="border mt-[6px] block w-full sm:text-sm rounded-md border rounded-md px-3 py-2 w-full text-[14px] mb-3" required>
+
+        <p class="font-[500] text-[16px] mt-4">Student List</p>
+        {% for student in students %}
+        <div class="flex py-[10px]" style="border-bottom: 1px solid #d3d3d3; align-items: center;">
+            <label for="student_{{ student.id }}" class="w-full text-[14px] p-0 m-0" style="overflow: hidden; text-overflow: ellipsis; text-wrap: nowrap;">
+                <!-- <input type="checkbox" id="student_{{ student.id }}" name="student_{{ student.id }}" value="1" checked> -->
+                {{ student.full_name }}
+            </label><br>
+            <label class="flex items-center relative w-auto cursor-pointer select-none">
+                <input type="checkbox" id="student_{{ student.id }}" name="student_{{ student.id }}" value="1" checked class="appearance-none transition-colors cursor-pointer w-14 h-7 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-blue-500 bg-red-500" />
+                <span class="absolute font-medium text-xs uppercase right-3 text-white"> A </span>
+                <span class="absolute font-medium text-xs uppercase right-9 text-white"> P </span>
+                <span class="w-7 h-7 right-7 absolute rounded-full transform transition-transform bg-gray-200"></span>
+            </label>
+        </div>
+        {% endfor %}
+        <div class="max-w-[650px] mx-auto p-2 w-full bg-white" style="position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); border-top: 1px solid #d3d3d3;">
+            <button type="submit" class="w-full py-[8px] text-[14px] text-[#ffffff] bg-[#00A52E] rounded-[30px] text-center">Mark Selected Present</button>
+        </div>
+    </form>
+    
+    </div>
+</div>
+    <script>
+        const currentDate = new Date();
+        const formattedDate = currentDate.toISOString().slice(0, 10);
+        document.getElementById('attendance_date').value = formattedDate;
+
+    </script>
+</body>
+</html>
